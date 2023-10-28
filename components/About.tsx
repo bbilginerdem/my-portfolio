@@ -3,14 +3,23 @@
 import React from "react";
 import SectionHeading from "@/components/SectionHeader";
 import { motion } from "framer-motion";
-// import { useSectionInView } from "@/lib/hooks";
+import { useInView } from "react-intersection-observer";
+import { useActiveSectionContext } from "@/context/ActiveSectionContextProvider";
 
 export default function About() {
-  // const { ref } = useSectionInView("About");
+  const { ref, inView } = useInView();
+  const { setActiveSection } = useActiveSectionContext()
+  console.log("🚀 ~ file: About.tsx:10 ~ About ~ inView:", inView)
+
+  if (inView) {
+    setActiveSection("About")
+  }
+
+  
 
   return (
     <motion.section
-      // ref={ref}
+      ref={ref}
       className="mb-28 max-w-[45rem] text-center leading-8 sm:mb-40 scroll-mt-28"
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
