@@ -17,7 +17,8 @@ function Project({
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["0 1", "1.33 1"]
+    // ! second element of the array changed from 1.33 1 to 1 1. Check later.
+    offset: ["0 1", "1 1"]
   })
 
   const scaleProgress = useTransform(scrollYProgress, [0, 1], [0.8, 1])
