@@ -1,7 +1,7 @@
 "use client"
 
 
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import Image from 'next/image'
 import { useScroll, motion, useTransform } from 'framer-motion'
 import { projectsData } from '@/lib/data'

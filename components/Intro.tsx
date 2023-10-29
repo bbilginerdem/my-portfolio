@@ -1,17 +1,19 @@
 "use client"
 
 import Image from 'next/image'
-import React from 'react'
 import profilePic from '@/public/images/pp.jpg'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { BsArrowRight, BsLinkedin } from 'react-icons/bs'
 import { HiDownload } from 'react-icons/hi'
 import { FaGithubSquare } from 'react-icons/fa'
+import { useSectionInView } from '@/lib/hooks'
 
 function Intro() {
+  const { ref } = useSectionInView("Home", 0.5)
+
   return (
-    <section className="mb-28 max-w-[50rem] text-center sm:mb-0 scroll-mt-[100rem]" id="home">
+    <section ref={ref} className="mb-28 max-w-[50rem] text-center sm:mb-0 scroll-mt-[100rem]" id="home">
       <div className="flex items-center justify-center">
         <motion.div initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: "tween", duration: 0.2 }} className="relative">
           <Image src={profilePic} alt="Profile Pictures" quality="95" priority={true} className="h-24 w-24 rounded-full object-contain border-[0.35rem] border-white shadow-xl" />
