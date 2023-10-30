@@ -16,7 +16,7 @@ export default function About() {
       transition={{ delay: 0.175 }}
       id="about"
     >
-      <SectionHeading mb='8'>About me</SectionHeading>
+      <SectionHeading mb='mb8'>About me</SectionHeading>
       <p className="mb-3">
         After graduating with a degree in{" "}
         <span className="font-medium">Physics</span>, I decided to pursue my
