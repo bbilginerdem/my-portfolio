@@ -1,25 +1,9 @@
 "use server"
 
 import { Resend } from 'resend'
-import { validateString } from '@/lib/utils'
+import { validateString, getErrorMessage } from '@/lib/utils'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-
-const getErrorMessage = (error: unknown) => {
-  let message: string
-
-  if (error instanceof Error) {
-    return {
-      error: error.message
-    }
-  } else if (error && typeof error === 'object' && 'message' in error) {
-    return {
-      error: error.message
-    }
-  }
-
-  return message
-}
 
 export const sendEmail = async (formData: FormData) => {
   const senderEmail = formData.get('senderEmail')
@@ -42,7 +26,7 @@ export const sendEmail = async (formData: FormData) => {
 
   try {
     await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'Contact Form <onboarding@resend.dev>',
       to: 'bbilgin.erdem@gmail.com',
       subject: 'Hello World',
       reply_to: senderEmail as string,
