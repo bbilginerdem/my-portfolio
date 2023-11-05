@@ -26,7 +26,7 @@ const contactFormEmail = ({ message, senderEmail }: ContactFormEmailProps) => {
         <Body>
           <Container>
             <Section>
-              <Heading>You received the following message from the contact form from Behzat Bilgin Erdem</Heading>
+              <Heading>You received the following message from the contact form</Heading>
               <Text>{message}</Text>
               <Hr />
               <Text>The sender's email is: {senderEmail}</Text>

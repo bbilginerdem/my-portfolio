@@ -1,3 +1,5 @@
+"use server"
+
 import { Resend } from 'resend'
 import { validateString, getErrorMessage } from '@/lib/utils'
 import ContactFormEmail from '@/email/contactFormEmail'
@@ -8,8 +10,6 @@ const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY)
 export const sendEmail = async (formData: FormData) => {
   const senderEmail = formData.get('senderEmail')
   const message = formData.get('message')
-
-  console.log(senderEmail)
 
   // simple server-side validation
   if (!validateString(senderEmail, 500)) {
