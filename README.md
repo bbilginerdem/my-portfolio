@@ -33,7 +33,6 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-
 Old dependencies with vulnerabilities
 "@react-email/components": "^0.0.7",
 "@react-email/tailwind": "^0.0.8",
@@ -61,7 +60,7 @@ New shit
 /// also do npm update
 /// change colors etc.
 /// add more frame notion? or maybe three.js etc
-// removed  react-email
+// removed react-email
 "@types/node": "20.8.4",
 "@types/react": "18.2.28",
 "@types/react-dom": "18.2.13",
