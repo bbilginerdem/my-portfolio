@@ -44,7 +44,7 @@ function Header() {
                   <motion.span
                     className='absolute inset-0 -z-10 rounded-full bg-gray-100 dark:bg-gray-700'
                     layoutId='activeSection'
-                    transition={{ type: 'tween', stiffness: 360, damping: 40 }}
+                    transition={{ type: 'spring', stiffness: 360, damping: 40 }}
                   ></motion.span>
                 )}
               </Link>
