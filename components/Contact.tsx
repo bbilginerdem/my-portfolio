@@ -5,7 +5,6 @@ import { useSectionInView } from '@/lib/hooks';
 import { motion } from 'framer-motion';
 import { sendEmail } from '@/actions/sendEmail';
 import SubmitBtn from './SubmitBtn';
-import { LuAlertTriangle } from 'react-icons/lu';
 import toast from 'react-hot-toast';
 
 export default function Contact() {

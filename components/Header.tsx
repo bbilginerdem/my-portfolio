@@ -28,9 +28,9 @@ function Header() {
             >
               <Link
                 className={clsx(
-                  'flex w-full items-center justify-center px-3 py-3 transition hover:text-gray-950 dark:text-gray-300 dark:hover:text-gray-500',
+                  'flex w-full items-center justify-center px-3 py-3 transition hover:text-gray-950 hover:shadow-[0_20px_40px_-10px_rgba(100,20,400,0.2)] dark:text-gray-300 dark:hover:text-gray-200',
                   {
-                    'text-gray-950 dark:text-gray-200':
+                    'text-gray-950 dark:text-gray-100':
                       activeSection === link.name,
                   }
                 )}
