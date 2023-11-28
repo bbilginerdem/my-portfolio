@@ -83,7 +83,7 @@ function Intro() {
 
         <a
           className='borderBlack group flex cursor-pointer items-center gap-2 rounded-full bg-white px-7 py-3 outline-none transition hover:scale-110 focus:scale-110 active:scale-105 dark:bg-white/10 active:dark:bg-white/20'
-          href='/Behzat_Bilgin_Erdem_CV___Developer.pdf'
+          href='/Behzat_Bilgin_Erdem_CV.pdf'
           download
         >
           Download CV{' '}
