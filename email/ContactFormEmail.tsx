@@ -1,21 +1,21 @@
-import React from 'react';
+import React from "react"
 import {
-  Html,
   Body,
+  Container,
   Head,
   Heading,
   Hr,
-  Container,
+  Html,
   Preview,
   Section,
   Text,
-} from '@react-email/components';
-import { Tailwind } from '@react-email/tailwind';
+} from "@react-email/components"
+import { Tailwind } from "@react-email/tailwind"
 
 type ContactFormEmailProps = {
-  message: string;
-  senderEmail: string;
-};
+  message: string
+  senderEmail: string
+}
 
 const ContactFormEmail = ({ message, senderEmail }: ContactFormEmailProps) => {
   return (
@@ -23,10 +23,10 @@ const ContactFormEmail = ({ message, senderEmail }: ContactFormEmailProps) => {
       <Head />
       <Preview>New message from your website</Preview>
       <Tailwind>
-        <Body className='bg-gray-100 text-black'>
+        <Body className="bg-gray-100 text-black">
           <Container>
-            <Section className='borderBlack my-10 rounded-md bg-white px-10 py-4'>
-              <Heading className='leading-tight'>
+            <Section className="borderBlack my-10 rounded-md bg-white px-10 py-4">
+              <Heading className="leading-tight">
                 You received the following message from the contact form.
               </Heading>
               <Text>{message}</Text>
@@ -37,7 +37,7 @@ const ContactFormEmail = ({ message, senderEmail }: ContactFormEmailProps) => {
         </Body>
       </Tailwind>
     </Html>
-  );
-};
+  )
+}
 
-export default ContactFormEmail;
+export default ContactFormEmail

@@ -1,107 +1,107 @@
-import React from 'react';
-import { CgWorkAlt } from 'react-icons/cg';
-import { FaReact } from 'react-icons/fa';
-import { LuGraduationCap } from 'react-icons/lu';
-import corpcommentImg from '@/public/images/corpcomment.png';
-import rmtdevImg from '@/public/images/rmtdev.png';
-import wordanalyticsImg from '@/public/images/wordanalytics.png';
+import React from "react"
+import corpcommentImg from "@/public/images/corpcomment.png"
+import rmtdevImg from "@/public/images/rmtdev.png"
+import wordanalyticsImg from "@/public/images/wordanalytics.png"
+import { CgWorkAlt } from "react-icons/cg"
+import { FaReact } from "react-icons/fa"
+import { LuGraduationCap } from "react-icons/lu"
 
 export const links = [
   {
-    name: 'Home',
-    hash: '#home',
+    name: "Home",
+    hash: "#home",
   },
   {
-    name: 'About',
-    hash: '#about',
+    name: "About",
+    hash: "#about",
   },
   {
-    name: 'Projects',
-    hash: '#projects',
+    name: "Projects",
+    hash: "#projects",
   },
   {
-    name: 'Skills',
-    hash: '#skills',
+    name: "Skills",
+    hash: "#skills",
   },
   {
-    name: 'Experience',
-    hash: '#experience',
+    name: "Experience",
+    hash: "#experience",
   },
   {
-    name: 'Contact',
-    hash: '#contact',
+    name: "Contact",
+    hash: "#contact",
   },
-] as const;
+] as const
 
 export const experiencesData = [
   {
-    title: 'Front-end Developer',
-    location: 'Ankara, TR',
+    title: "Front-end Developer",
+    location: "Ankara, TR",
     description:
-      'I graduated after 6 months of studying, HTML, CSS and JS. I immediately found a job as a front-end developer.',
+      "I graduated after 6 months of studying, HTML, CSS and JS. I immediately found a job as a front-end developer.",
     icon: React.createElement(LuGraduationCap),
-    date: '2020',
+    date: "2020",
   },
   {
-    title: 'Front-End Developer',
-    location: 'Ankara, TR & Denver, USA',
+    title: "Front-End Developer",
+    location: "Ankara, TR & Denver, USA",
     description:
-      'I worked as a front-end developer for 6-9 months in 3 jobs and 1 year in another job. I also upskilled to the full stack.',
+      "I worked as a front-end developer for 6-9 months in 3 jobs and 1 year in another job. I also upskilled to the full stack.",
     icon: React.createElement(CgWorkAlt),
-    date: '2021 - 2023',
+    date: "2021 - 2023",
   },
   {
-    title: 'Freelance',
-    location: '',
+    title: "Freelance",
+    location: "",
     description:
       "I'm now a frontend and mobile developer working as a freelancer. My stack includes React, Next.js, TypeScript, Tailwind, Prisma and MongoDB. I'm open to full-time opportunities.",
     icon: React.createElement(FaReact),
-    date: '2023 - present',
+    date: "2023 - present",
   },
-] as const;
+] as const
 
 export const projectsData = [
   {
-    title: 'CorpComment',
+    title: "CorpComment",
     description:
-      'I worked as a full-stack developer on this startup project for a year. Users can give public feedback to companies.',
-    tags: ['React', 'Next.js', 'MongoDB', 'Tailwind', 'Prisma'],
+      "I worked as a full-stack developer on this startup project for a year. Users can give public feedback to companies.",
+    tags: ["React", "Next.js", "MongoDB", "Tailwind", "Prisma"],
     imageUrl: corpcommentImg,
   },
   {
-    title: 'rmtDev',
+    title: "rmtDev",
     description:
-      'Job board for remote developer jobs. I was the front-end developer. It has features like filtering, sorting and pagination.',
-    tags: ['React', 'TypeScript', 'Next.js', 'Tailwind', 'Redux'],
+      "Job board for remote developer jobs. I was the front-end developer. It has features like filtering, sorting and pagination.",
+    tags: ["React", "TypeScript", "Next.js", "Tailwind", "Redux"],
     imageUrl: rmtdevImg,
   },
   {
-    title: 'Word Analytics',
+    title: "Word Analytics",
     description:
-      'A public web app for quick analytics on text. It shows word count, character count and social media post limits.',
-    tags: ['React', 'Next.js', 'SQL', 'Tailwind', 'Framer'],
+      "A public web app for quick analytics on text. It shows word count, character count and social media post limits.",
+    tags: ["React", "Next.js", "SQL", "Tailwind", "Framer"],
     imageUrl: wordanalyticsImg,
   },
-] as const;
+] as const
 
 export const skillsData = [
-  'HTML',
-  'CSS',
-  'JavaScript',
-  'TypeScript',
-  'React',
-  'Next.js',
-  'Node.js',
-  'Git',
-  'Tailwind',
-  'Prisma',
-  'MongoDB',
-  'Redux',
-  'GraphQL',
-  'Apollo',
-  'Express',
-  'PostgreSQL',
-  'Python',
-  'Django',
-  'Framer Motion',
-] as const;
+  "HTML",
+  "CSS",
+  "JavaScript",
+  "TypeScript",
+  "React",
+  "Next.js",
+  "Node.js",
+  "Git",
+  "Tailwind",
+  "Prisma",
+  "MongoDB",
+  "Redux",
+  "GraphQL",
+  "Apollo",
+  "Express",
+  "PostgreSQL",
+  "Python",
+  "Django",
+  "Framer Motion",
+] as const
