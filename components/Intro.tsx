@@ -101,7 +101,7 @@ function Intro() {
 
         <a
           className="borderBlack flex cursor-pointer items-center gap-2 rounded-full bg-white p-4 text-gray-700 outline-none transition hover:scale-[1.15] hover:text-gray-950 focus:scale-110 active:scale-105 dark:bg-white/10 dark:text-white/80 active:dark:bg-white/20"
-          href="https://github.com/kihlaj"
+          href="https://github.com/bbilginerdem"
           target="_blank"
         >
           <FaGithubSquare />
