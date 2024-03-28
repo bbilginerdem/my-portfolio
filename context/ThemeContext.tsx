@@ -25,7 +25,7 @@ const ThemeContext = createContext<ThemeContextType | null>(null)
 export default function ThemeContextProvider({
   children,
 }: Readonly<ThemeContextProviderProps>) {
-  const [theme, setTheme] = useState<Theme>("light")
+  const [theme, setTheme] = useState<Theme>("dark")
 
   // to not generate toggleTheme in every render
   const toggleTheme = useCallback(() => {
