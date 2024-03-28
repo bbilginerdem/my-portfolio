@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --check --ignore-path .gitignore .",
-    "format:fix": "prettier --write --ignore-path .gitignore ."
+    "format": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
     "@react-email/components": "^0.0.16",
@@ -25,6 +24,7 @@
     "react-intersection-observer": "^9.8.1",
     "react-vertical-timeline-component": "^3.6.0",
     "resend": "^3.2.0",
+    "sharp": "^0.33.3",
     "typescript": "5.4.3"
   },
   "devDependencies": {

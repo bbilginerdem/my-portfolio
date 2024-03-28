@@ -1,8 +1,4 @@
-import React from "react";
-
-
-
-
+import React from "react"
 
 type SectionHeadingProps = {
   mb: keyof MbVariable
