@@ -34,11 +34,11 @@ export default function Contact() {
       <SectionHeading mb="mb8">Contact me</SectionHeading>
 
       <p className="-mt-6 text-gray-700 dark:text-white/80">
-        Please contact me directly at{" "}
+        You can contact me throught this from or directly at{" "}
         <a className="underline" href="mailto:bbilgin.erdem@gmail.com">
           my e-mail
         </a>{" "}
-        or through this form.
+        .
       </p>
 
       <form
