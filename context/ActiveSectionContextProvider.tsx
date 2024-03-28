@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useContext, useMemo, useState } from "react"
 
 import type { SectionName } from "@/lib/types"
 
@@ -20,19 +20,22 @@ export const ActiveSectionContext =
 
 export default function ActiveSectionContextProvider({
   children,
-}: ActiveSectionContextProviderProps) {
+}: Readonly<ActiveSectionContextProviderProps>) {
   const [activeSection, setActiveSection] = useState<SectionName>("Home")
   const [timeOfLastClick, setTimeOfLastClick] = useState(0)
 
+  const value = useMemo(
+    () => ({
+      activeSection,
+      setActiveSection,
+      timeOfLastClick,
+      setTimeOfLastClick,
+    }),
+    [activeSection, timeOfLastClick]
+  )
+
   return (
-    <ActiveSectionContext.Provider
-      value={{
-        activeSection,
-        setActiveSection,
-        timeOfLastClick,
-        setTimeOfLastClick,
-      }}
-    >
+    <ActiveSectionContext.Provider value={value}>
       {children}
     </ActiveSectionContext.Provider>
   )

@@ -1,18 +1,25 @@
-import React from "react"
+import React from "react";
+
+
+
+
 
 type SectionHeadingProps = {
-  mb: keyof mbVariable
+  mb: keyof MbVariable
   children: React.ReactNode
 }
 
-interface mbVariable {
+interface MbVariable {
   mb8: string
   mb6: string
   mb4: string
 }
 
-export default function SectionHeading({ mb, children }: SectionHeadingProps) {
-  const mbVariants: mbVariable = {
+export default function SectionHeading({
+  mb,
+  children,
+}: Readonly<SectionHeadingProps>) {
+  const mbVariants: MbVariable = {
     mb8: "mb-8",
     mb6: "mb-6",
     mb4: "mb-4",

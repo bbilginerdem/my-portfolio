@@ -32,10 +32,10 @@ function Project({ title, description, tags, imageUrl }: ProjectProps) {
             {description}
           </p>
           <ul className="mt-4 flex flex-wrap gap-2 sm:mt-auto">
-            {tags.map((tag, index) => (
+            {tags.map((tag) => (
               <li
                 className="rounded-full bg-black/[0.7] px-3 py-1 text-[0.7rem] uppercase tracking-wider text-white dark:text-white/80"
-                key={index}
+                key={tag}
               >
                 {tag}
               </li>

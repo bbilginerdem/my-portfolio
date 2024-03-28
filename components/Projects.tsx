@@ -15,8 +15,8 @@ function Projects() {
     <section ref={ref} id="projects" className="mb-28 scroll-mt-28">
       <SectionHeading mb="mb8">My Projects</SectionHeading>
       <div>
-        {projectsData.map((project, index) => (
-          <Fragment key={index}>
+        {projectsData.map((project) => (
+          <Fragment key={project.title}>
             <Project {...project} />
           </Fragment>
         ))}
