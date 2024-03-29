@@ -64,9 +64,10 @@ export const projectsData = [
   {
     title: "NexArb",
     description:
-      "I am working as a frontend developer on this startup project for a 6 months. Objective of the project is for users to be able to do transactions on solana using their wallet with ease.",
+      "I am working as a frontend developer on this open source project for about 6 months and ongoing. Objective of the project is for users to be able to do transactions on solana using their wallet with ease.",
     tags: ["React", "Next.js", "MongoDB", "Tailwind", "Web 3", "Zustand"],
     imageUrl: nextArbImg,
+    link: "https://github.com/NexArb/WebApp",
   },
   {
     title: "ITRANSL8",
@@ -74,13 +75,15 @@ export const projectsData = [
       "AI translation and dubbing tool. I have been working on frontend development for about a two months now. Finish MVP of dashboard and landing page with authentication using authjs.",
     tags: ["Prisma", "TypeScript", "Next.js", "Tailwind", "Shadcn"],
     imageUrl: itransl8Img,
+    link: "https://itransl8-kihlaj.vercel.app/en",
   },
   {
-    title: "Word Analytics",
+    title: "Final App",
     description:
       "A cross platform mobile application for high school students to just video, from variety of topics.",
     tags: ["React Native", "Expo", "Context API", "Styled Components"],
     imageUrl: finalImg,
+    link: "https://play.google.com/store/apps/details?id=com.finalokullari.finalvideo&pli=1",
   },
 ] as const
 
