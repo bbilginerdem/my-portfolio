@@ -1,7 +1,6 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
 import { useActiveSectionContext } from "@/context/ActiveSectionContextProvider"
 import profilePic from "@/public/images/pp.jpg"
 import { motion } from "framer-motion"
@@ -33,7 +32,9 @@ function Intro() {
             alt="Profile Pictures"
             quality="95"
             priority={true}
-            className="h-24 w-24 rounded-full border-[0.35rem] border-white object-contain shadow-xl"
+            width={160}
+            height={160}
+            className="rounded-full border-[0.35rem] border-white object-contain shadow-xl"
           />
           <motion.span
             initial={{ opacity: 0, scale: 0 }}
@@ -70,7 +71,7 @@ function Intro() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <Link
+        <a
           href="#contact"
           className="group flex items-center gap-2 rounded-full bg-gray-900 px-7 py-3 text-white outline-none transition hover:scale-110 hover:bg-gray-950 focus:scale-110 active:scale-105"
           onClick={() => {
@@ -80,7 +81,7 @@ function Intro() {
         >
           Contact me here{" "}
           <BsArrowRight className="opacity-70 transition group-hover:translate-x-1" />
-        </Link>
+        </a>
 
         <a
           className="borderBlack group flex cursor-pointer items-center gap-2 rounded-full bg-white px-7 py-3 outline-none transition hover:scale-110 focus:scale-110 active:scale-105 dark:bg-white/10 active:dark:bg-white/20"
@@ -101,7 +102,7 @@ function Intro() {
           <BsLinkedin />
         </a>
 
-        <Link
+        <a
           className="borderBlack flex cursor-pointer items-center gap-2 rounded-full bg-white p-4 text-gray-700 outline-none transition hover:scale-[1.15] hover:text-gray-950 focus:scale-110 active:scale-105 dark:bg-white/10 dark:text-white/80 active:dark:bg-white/20"
           href="https://github.com/bbilginerdem"
           target="_blank"
@@ -109,7 +110,7 @@ function Intro() {
           title="View my GitHub profile"
         >
           <FaGithubSquare />
-        </Link>
+        </a>
       </motion.div>
     </section>
   )

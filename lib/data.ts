@@ -1,7 +1,7 @@
 import React from "react"
-import corpcommentImg from "@/public/images/corpcomment.png"
-import rmtdevImg from "@/public/images/rmtdev.png"
-import wordanalyticsImg from "@/public/images/wordanalytics.png"
+import finalImg from "@/public/images/final.webp"
+import itransl8Img from "@/public/images/itransl8.png"
+import nextArbImg from "@/public/images/nexarb.png"
 import { CgWorkAlt } from "react-icons/cg"
 import { FaReact } from "react-icons/fa"
 import { LuGraduationCap } from "react-icons/lu"
@@ -62,25 +62,25 @@ export const experiencesData = [
 
 export const projectsData = [
   {
-    title: "CorpComment",
+    title: "NexArb",
     description:
-      "I worked as a full-stack developer on this startup project for a year. Users can give public feedback to companies.",
-    tags: ["React", "Next.js", "MongoDB", "Tailwind", "Prisma"],
-    imageUrl: corpcommentImg,
+      "I am working as a frontend developer on this startup project for a 6 months. Objective of the project is for users to be able to do transactions on solana using their wallet with ease.",
+    tags: ["React", "Next.js", "MongoDB", "Tailwind", "Web 3", "Zustand"],
+    imageUrl: nextArbImg,
   },
   {
-    title: "rmtDev",
+    title: "ITRANSL8",
     description:
-      "Job board for remote developer jobs. I was the front-end developer. It has features like filtering, sorting and pagination.",
-    tags: ["React", "TypeScript", "Next.js", "Tailwind", "Redux"],
-    imageUrl: rmtdevImg,
+      "AI translation and dubbing tool. I have been working on frontend development for about a two months now. Finish MVP of dashboard and landing page with authentication using authjs.",
+    tags: ["Prisma", "TypeScript", "Next.js", "Tailwind", "Shadcn"],
+    imageUrl: itransl8Img,
   },
   {
     title: "Word Analytics",
     description:
-      "A public web app for quick analytics on text. It shows word count, character count and social media post limits.",
-    tags: ["React", "Next.js", "SQL", "Tailwind", "Framer"],
-    imageUrl: wordanalyticsImg,
+      "A cross platform mobile application for high school students to just video, from variety of topics.",
+    tags: ["React Native", "Expo", "Context API", "Styled Components"],
+    imageUrl: finalImg,
   },
 ] as const
 
@@ -91,17 +91,16 @@ export const skillsData = [
   "TypeScript",
   "React",
   "Next.js",
-  "Node.js",
   "Git",
   "Tailwind",
   "Prisma",
   "MongoDB",
   "Redux",
+  "Zustand",
   "GraphQL",
-  "Apollo",
   "Express",
   "PostgreSQL",
   "Python",
-  "Django",
   "Framer Motion",
+  "Web3",
 ] as const

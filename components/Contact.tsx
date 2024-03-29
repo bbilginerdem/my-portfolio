@@ -34,15 +34,15 @@ export default function Contact() {
       <SectionHeading mb="mb8">Contact me</SectionHeading>
 
       <p className="-mt-6 text-gray-700 dark:text-white/80">
-        You can contact me throught this from or directly at{" "}
+        You can contact me through this from or directly at{" "}
         <a className="underline" href="mailto:bbilgin.erdem@gmail.com">
           my e-mail
-        </a>{" "}
+        </a>
         .
       </p>
 
       <form
-        className="mt-10 flex flex-col dark:text-black"
+        className="mt-10 flex flex-col gap-1 dark:text-black"
         action={async (formData) => {
           const { error } = await sendEmail(formData)
 
@@ -69,7 +69,9 @@ export default function Contact() {
           required
           maxLength={5000}
         />
-        <SubmitBtn />
+        <div className="mx-auto">
+          <SubmitBtn />
+        </div>
       </form>
     </motion.section>
   )
