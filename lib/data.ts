@@ -75,7 +75,7 @@ export const projectsData = [
       "AI translation and dubbing tool. I have been working on frontend development for about a two months now. Finish MVP of dashboard and landing page with authentication using authjs.",
     tags: ["Prisma", "TypeScript", "Next.js", "Tailwind", "Shadcn"],
     imageUrl: itransl8Img,
-    link: "https://itransl8-kihlaj.vercel.app/en",
+    link: "https://itransl8.com",
   },
   {
     title: "Final App",
