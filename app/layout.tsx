@@ -15,7 +15,7 @@ const dmSans = DM_Sans({ subsets: ["latin"] })
 export const metadata = {
   title: "Behzat Bilgin Erdem | Frontend Developer",
   description:
-    "Behzat Bilgin is a frontend developer based in Ankara, Turkey with 3 years of experience.",
+    "Behzat Bilgin is a frontend developer based in Ankara, Turkey with 4 years of experience.",
 }
 
 export default function RootLayout({
