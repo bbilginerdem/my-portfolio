@@ -1,50 +1,50 @@
-"use server"
+"use server";
 
-import React from "react"
-import { Resend } from "resend"
+import React from "react";
+import { Resend } from "resend";
 
-import { getErrorMessage, validateString } from "@/lib/utils"
+import { getErrorMessage, validateString } from "@/lib/utils";
 
-import ContactFormEmail from "../email/ContactFormEmail"
+import ContactFormEmail from "../email/ContactFormEmail";
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendEmail = async (formData: FormData) => {
-  const senderEmail = formData.get("senderEmail")
-  const message = formData.get("message")
+	const senderEmail = formData.get("senderEmail");
+	const message = formData.get("message");
 
-  // simple server-side validation
-  if (!validateString(senderEmail, 500)) {
-    return {
-      error: "Invalid sender email",
-    }
-  }
+	// simple server-side validation
+	if (!validateString(senderEmail, 500)) {
+		return {
+			error: "Invalid sender email",
+		};
+	}
 
-  if (!validateString(message, 5000)) {
-    return {
-      error: "Invalid message",
-    }
-  }
+	if (!validateString(message, 5000)) {
+		return {
+			error: "Invalid message",
+		};
+	}
 
-  let data
-  try {
-    data = await resend.emails.send({
-      from: "Contact Form <onboarding@resend.dev>",
-      to: "bbilgin.erdem@gmail.com",
-      subject: "Hello World",
-      reply_to: senderEmail as string,
-      react: React.createElement(ContactFormEmail, {
-        message: message as string,
-        senderEmail: senderEmail as string,
-      }),
-    })
-  } catch (error: unknown) {
-    return {
-      error: getErrorMessage(error),
-    }
-  }
+	let data;
+	try {
+		data = await resend.emails.send({
+			from: "Contact Form <onboarding@resend.dev>",
+			to: "bbilgin.erdem@gmail.com",
+			subject: "Hello World",
+			reply_to: senderEmail as string,
+			react: React.createElement(ContactFormEmail, {
+				message: message as string,
+				senderEmail: senderEmail as string,
+			}),
+		});
+	} catch (error: unknown) {
+		return {
+			error: getErrorMessage(error),
+		};
+	}
 
-  return {
-    data,
-  }
-}
+	return {
+		data,
+	};
+};
