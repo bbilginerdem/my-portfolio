@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { BsArrowRight, BsLinkedin } from "react-icons/bs";
 import { FaGithubSquare } from "react-icons/fa";
-import { HiDownload } from "react-icons/hi";
 
 import { useSectionInView } from "@/lib/hooks";
 import MyButton from "./MyButton";
@@ -84,16 +83,6 @@ function Intro() {
                             Contact me here{" "}
                             <BsArrowRight className="opacity-70 transition group-hover:translate-x-1" />
                         </MyButton>
-                    </a>
-                </div>
-                <div>
-                    <a
-                        className="borderBlack group flex cursor-pointer items-center gap-2 rounded-full bg-white px-7 py-3 outline-none transition hover:scale-110 focus:scale-110 active:scale-105 dark:bg-white/10 active:dark:bg-white/20"
-                        href="/Behzat_Bilgin_Erdem_CV.pdf"
-                        download
-                    >
-                        Download CV{" "}
-                        <HiDownload className="opacity-60 transition group-hover:translate-y-1" />
                     </a>
                 </div>
                 <div>
