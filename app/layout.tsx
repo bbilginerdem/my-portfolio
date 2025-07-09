@@ -9,10 +9,11 @@ import { Toaster } from "react-hot-toast";
 
 import Footer from "@/components/Footer";
 import ThemeSwitch from "@/components/ThemeSwitch";
+import type { Metadata } from 'next/types';
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
-export const metadata = {
+export const metadata: Metadata = {
     title: "Behzat Bilgin Erdem | Frontend Developer",
     description:
         "Behzat Bilgin is a frontend developer based in Ankara, Turkey with 4 years of experience.",

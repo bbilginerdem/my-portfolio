@@ -6,6 +6,6 @@ module.exports = {
         "./app/**/*.{js,ts,jsx,tsx,mdx}",
     ],
     theme: {},
-    plugins: ["prettier-plugin-tailwindcss"],
+    plugins: [],
     darkMode: "class",
 };
