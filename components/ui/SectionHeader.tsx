@@ -23,7 +23,7 @@ export default function SectionHeading({
 
 	return (
 		<h2
-			className={`${mbVariants[mb]} text-center font-medium text-3xl capitalize`}
+			className={`${mbVariants[mb]} text-center font-medium text-2xl capitalize sm:text-3xl`}
 		>
 			{children}
 		</h2>

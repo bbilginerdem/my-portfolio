@@ -1,7 +1,5 @@
+import { Briefcase, Code, GraduationCap } from "lucide-react";
 import React from "react";
-import { CgWorkAlt } from "react-icons/cg";
-import { FaReact } from "react-icons/fa";
-import { LuGraduationCap } from "react-icons/lu";
 import finalImg from "@/public/images/final.webp";
 import itransl8Img from "@/public/images/itransl8.png";
 import nextArbImg from "@/public/images/nexarb.png";
@@ -35,7 +33,7 @@ export const experiencesData = [
 		location: "Ankara, TR",
 		description:
 			"I graduated after 6 months of studying, HTML, CSS and JS. I immediately found a job as a front-end developer.",
-		icon: React.createElement(LuGraduationCap),
+		icon: React.createElement(GraduationCap),
 		date: "2020",
 	},
 	{
@@ -43,7 +41,7 @@ export const experiencesData = [
 		location: "Ankara, TR & Denver, USA",
 		description:
 			"I worked as a front-end developer for 6-9 months in 3 jobs and 1 year in another job. I also upskilled to the full stack.",
-		icon: React.createElement(CgWorkAlt),
+		icon: React.createElement(Briefcase),
 		date: "2021 - 2023",
 	},
 	{
@@ -51,7 +49,7 @@ export const experiencesData = [
 		location: "",
 		description:
 			"I'm now a frontend and mobile developer working as a freelancer. My stack includes React, Next.js, TypeScript, Tailwind, Prisma and MongoDB. I'm open to full-time opportunities.",
-		icon: React.createElement(FaReact),
+		icon: React.createElement(Code),
 		date: "2023 - present",
 	},
 ] as const;

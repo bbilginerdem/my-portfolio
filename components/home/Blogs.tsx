@@ -31,7 +31,7 @@ export default function Blogs() {
 								<span className="mb-2 text-gray-500 text-xs uppercase tracking-wider dark:text-white/50">
 									{new Date(post.publishDate).toLocaleDateString()}
 								</span>
-								<h3 className="mb-2 font-semibold text-xl transition-colors group-hover:text-pink-500">
+								<h3 className="mb-2 font-semibold text-lg transition-colors group-hover:text-pink-500">
 									{post.title}
 								</h3>
 								<p className="text-gray-700 text-sm leading-relaxed dark:text-white/70">

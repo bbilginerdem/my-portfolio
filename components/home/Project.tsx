@@ -34,7 +34,7 @@ function Project({ title, description, tags, imageUrl, link }: ProjectProps) {
 			>
 				<section className="relative max-w-2xl overflow-hidden rounded-lg border border-black/5 bg-gray-100 transition hover:bg-gray-200 sm:h-80 sm:pr-8 sm:group-even:pl-8 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
 					<div className="flex h-full flex-col px-5 py-4 pb-7 sm:max-w-[50%] sm:pt-10 sm:pr-2 sm:pl-10 sm:group-even:ml-72">
-						<h3>{title}</h3>
+						<h3 className="font-semibold text-lg sm:text-xl">{title}</h3>
 						<p className="mt-2 text-gray-800 leading-relaxed dark:text-white/90">
 							{description}
 						</p>

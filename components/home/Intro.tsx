@@ -1,12 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { BsArrowRight, BsLinkedin } from "react-icons/bs";
-import { FaGithubSquare } from "react-icons/fa";
 import { useActiveSectionContext } from "@/context/ActiveSectionContextProvider";
 import { useSectionInView } from "@/lib/hooks";
 import profilePic from "@/public/images/pp.jpg";
+import { GitHubIcon, LinkedInIcon } from "../ui/Icons";
 import MyButton from "../ui/MyButton";
 
 function Intro() {
@@ -52,20 +52,20 @@ function Intro() {
 			</div>
 
 			<motion.h1
-				className="mt-4 mb-10 px-4 font-medium text-2xl leading-normal! sm:text-4xl"
+				className="mt-4 mb-10 px-4 font-medium text-xl leading-normal! sm:text-3xl"
 				initial={{ opacity: 0, y: 100 }}
 				animate={{ opacity: 1, y: 0 }}
 			>
 				<span className="font-bold">Hello, I&apos;m Bilgin.</span> I&apos;m a{" "}
 				<span className="font-bold">frontend developer</span> with{" "}
-				<span className="font-bold">4 years</span> of experience. I enjoy
+				<span className="font-bold">+5 years</span> of experience. I enjoy
 				building <span className="italic">sites & apps</span>. My focus is{" "}
 				<span className="underline">React</span> (Next.js) and{" "}
 				<span className="underline">React Native</span> (Expo).
 			</motion.h1>
 
 			<motion.div
-				className="flex flex-col items-center justify-center gap-4 px-4 font-medium text-lg sm:flex-row"
+				className="flex flex-col items-center justify-center gap-4 px-4 font-medium text-base sm:flex-row"
 				initial={{ opacity: 0, y: 100 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ delay: 0.1 }}
@@ -73,14 +73,17 @@ function Intro() {
 				<div>
 					<a href="#contact">
 						<MyButton
-							className="group flex items-center gap-2 rounded-full bg-gray-900 px-7 py-3 text-white outline-none transition hover:scale-110 hover:bg-gray-950 focus:scale-110 active:scale-105"
+							className="group flex items-center gap-2 rounded-full bg-gray-900 px-7 py-3 text-white outline-none transition hover:scale-105 hover:bg-gray-950 focus:scale-105 active:scale-100"
 							onClick={() => {
 								setActiveSection("Contact");
 								setTimeOfLastClick(Date.now());
 							}}
 						>
 							Contact me here{" "}
-							<BsArrowRight className="opacity-70 transition group-hover:translate-x-1" />
+							<ArrowRight
+								size={18}
+								className="opacity-70 transition group-hover:translate-x-1"
+							/>
 						</MyButton>
 					</a>
 				</div>
@@ -93,7 +96,7 @@ function Intro() {
 						title="View my Linkedin profile"
 						rel="noreferrer"
 					>
-						<BsLinkedin />
+						<LinkedInIcon size={20} />
 					</a>
 				</div>
 				<div>
@@ -105,7 +108,7 @@ function Intro() {
 						title="View my GitHub profile"
 						rel="noreferrer"
 					>
-						<FaGithubSquare />
+						<GitHubIcon size={20} />
 					</a>
 				</div>
 			</motion.div>

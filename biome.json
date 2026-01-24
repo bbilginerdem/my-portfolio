@@ -6,7 +6,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"includes": ["**", "!**/node_modules", "!**/.next"]
+		"includes": ["**", "!**/node_modules", "!**/.next", "!app/globals.css"]
 	},
 	"formatter": {
 		"enabled": true,
