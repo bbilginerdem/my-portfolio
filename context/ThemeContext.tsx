@@ -30,10 +30,15 @@ export default function ThemeContextProvider({
 
 	// to not generate toggleTheme in every render
 	const toggleTheme = useCallback(() => {
-		const newTheme = theme === "light" ? "dark" : "light";
-		setTheme(newTheme);
-		globalThis.localStorage.setItem("theme", newTheme);
-		document.documentElement.classList.toggle("dark");
+		if (theme === "light") {
+			setTheme("dark");
+			globalThis.localStorage.setItem("theme", "dark");
+			document.documentElement.classList.add("dark");
+		} else {
+			setTheme("light");
+			globalThis.localStorage.setItem("theme", "light");
+			document.documentElement.classList.remove("dark");
+		}
 	}, [theme]);
 
 	useEffect(() => {
@@ -41,7 +46,9 @@ export default function ThemeContextProvider({
 
 		if (localTheme) {
 			setTheme(localTheme);
-			document.documentElement.classList.add(localTheme);
+			if (localTheme === "dark") {
+				document.documentElement.classList.add("dark");
+			}
 		} else if (globalThis.matchMedia("(prefers-color-scheme: dark)").matches) {
 			setTheme("dark");
 			document.documentElement.classList.add("dark");

@@ -2,14 +2,13 @@ import Header from "@/components/layout/Header";
 
 import "./globals.css";
 
-import ActiveSectionContextProvider from "@/context/ActiveSectionContextProvider";
-import ThemeContextProvider from "@/context/ThemeContext";
 import { DM_Sans } from "next/font/google";
+import type { Metadata } from "next/types";
 import { Toaster } from "react-hot-toast";
-
 import Footer from "@/components/layout/Footer";
 import ThemeSwitch from "@/components/layout/ThemeSwitch";
-import type { Metadata } from "next/types";
+import ActiveSectionContextProvider from "@/context/ActiveSectionContextProvider";
+import ThemeContextProvider from "@/context/ThemeContext";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 

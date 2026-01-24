@@ -1,6 +1,6 @@
-import { blogPosts } from "@/lib/blog-data";
 import Link from "next/link";
 import SectionHeader from "@/components/ui/SectionHeader";
+import { blogPosts } from "@/lib/blog-data";
 
 export const metadata = {
 	title: "Blog | Behzat Bilgin Erdem",

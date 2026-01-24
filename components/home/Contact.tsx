@@ -1,8 +1,8 @@
 "use client";
 
-import { sendEmail } from "@/actions/sendEmail";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
+import { sendEmail } from "@/actions/sendEmail";
 
 import { useSectionInView } from "@/lib/hooks";
 

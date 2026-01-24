@@ -1,6 +1,6 @@
-import { blogPosts } from "@/lib/blog-data";
-import { notFound } from "next/navigation";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { blogPosts } from "@/lib/blog-data";
 
 type Props = Readonly<{
 	params: Promise<{ slug: string }>;

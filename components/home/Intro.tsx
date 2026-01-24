@@ -1,13 +1,12 @@
 "use client";
 
-import { useActiveSectionContext } from "@/context/ActiveSectionContextProvider";
-import profilePic from "@/public/images/pp.jpg";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { BsArrowRight, BsLinkedin } from "react-icons/bs";
 import { FaGithubSquare } from "react-icons/fa";
-
+import { useActiveSectionContext } from "@/context/ActiveSectionContextProvider";
 import { useSectionInView } from "@/lib/hooks";
+import profilePic from "@/public/images/pp.jpg";
 import MyButton from "../ui/MyButton";
 
 function Intro() {

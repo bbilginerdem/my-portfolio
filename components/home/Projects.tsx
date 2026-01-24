@@ -4,9 +4,8 @@ import { Fragment } from "react";
 
 import { projectsData } from "@/lib/data";
 import { useSectionInView } from "@/lib/hooks";
-
-import Project from "./Project";
 import SectionHeading from "../ui/SectionHeader";
+import Project from "./Project";
 
 function Projects() {
 	const { ref } = useSectionInView("Projects", 0.5);

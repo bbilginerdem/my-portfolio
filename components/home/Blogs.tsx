@@ -1,10 +1,10 @@
 "use client";
 
-import SectionHeader from "../ui/SectionHeader";
-import { blogPosts } from "@/lib/blog-data";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { blogPosts } from "@/lib/blog-data";
 import { useSectionInView } from "@/lib/hooks";
+import SectionHeader from "../ui/SectionHeader";
 
 export default function Blogs() {
 	const { ref } = useSectionInView("Blog", 0.5);

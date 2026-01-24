@@ -1,10 +1,10 @@
-import finalImg from "@/public/images/final.webp";
-import itransl8Img from "@/public/images/itransl8.png";
-import nextArbImg from "@/public/images/nexarb.png";
 import React from "react";
 import { CgWorkAlt } from "react-icons/cg";
 import { FaReact } from "react-icons/fa";
 import { LuGraduationCap } from "react-icons/lu";
+import finalImg from "@/public/images/final.webp";
+import itransl8Img from "@/public/images/itransl8.png";
+import nextArbImg from "@/public/images/nexarb.png";
 
 export const links = [
 	{
