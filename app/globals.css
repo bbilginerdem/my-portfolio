@@ -1,11 +1,58 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @variant dark (&:is(.dark, .dark *));
 
+/* Shiki Code Styles */
+pre.shiki {
+  @apply my-8 overflow-hidden rounded-xl border border-black/10 dark:border-white/10 p-4 overflow-x-auto !bg-transparent;
+}
+
+pre.shiki code {
+  @apply bg-transparent p-0;
+}
+
+
+
+@theme {
+  --color-primary-50: #f8fafc;
+  --color-primary-100: #f1f5f9;
+  --color-primary-200: #e2e8f0;
+  --color-primary-300: #cbd5e1;
+  --color-primary-400: #94a3b8;
+  --color-primary-500: #64748b;
+  --color-primary-600: #475569;
+  --color-primary-700: #334155;
+  --color-primary-800: #1e293b;
+  --color-primary-900: #0f172a;
+}
+
 html {
-	--line-color: #e5e7eb;
+  --line-color: #e5e7eb;
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-gray-50 text-gray-950 relative dark:bg-gray-950 dark:text-gray-50/90;
 }
 
 .borderBlack {
-	@apply border border-black/10;
+  @apply border border-black/10;
+}
+
+.glass-container {
+  @apply backdrop-blur-md bg-white/70 border border-white/20 shadow-xl dark:bg-black/40 dark:border-white/10;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors dark:bg-gray-800 dark:hover:bg-gray-700;
 }

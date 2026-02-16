@@ -1,0 +1,41 @@
+---
+title: "Mastering Tailwind CSS v4"
+publishDate: "2026-01-20T12:00:00Z"
+author: "Behzat Bilgin Erdem"
+excerpt: "Tips and tricks for the new Tailwind CSS v4 engine."
+readingTime: 3
+tags: ["Tailwind CSS", "CSS", "Frontend"]
+category: "Design"
+---
+
+# Mastering Tailwind CSS v4
+
+Tailwind CSS v4 is a significant leak forward for the utility-first CSS framework. It's built from the ground up for speed and integration with modern build tools.
+
+## What's New?
+
+The biggest change in v4 is the **Rust-based engine**, which makes build times almost instantaneous.
+
+### 1. New Default Theme
+Tailwind v4 comes with a updated color palette and improved spacing defaults that feel more "premium" out of the box.
+
+### 2. Zero Configuration
+You can start using Tailwind without a `tailwind.config.js` file if you prefer, as it can infer many things from your CSS imports.
+
+### 3. Native Glassmorphism
+With new backdrop utilities, creating glassmorphism effects is easier than ever:
+
+```html
+<div class="bg-white/10 backdrop-blur-md border border-white/20">
+  Glassy Content
+</div>
+```
+
+## Tips for Upgrading
+
+- Check your plugins, some might need updates for the new engine.
+- Embrace the new `@import "tailwindcss";` syntax in your CSS files.
+
+## Summary
+
+Tailwind v4 is about speed and simplicity. It allows you to focus on design without worrying about build performance.

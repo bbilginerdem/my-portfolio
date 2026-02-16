@@ -1,42 +1,61 @@
 import Link from "next/link";
 import SectionHeader from "@/components/ui/SectionHeader";
-import { blogPosts } from "@/lib/blog-data";
+import { getAllPosts } from "@/lib/blog";
 
 export const metadata = {
 	title: "Blog | Behzat Bilgin Erdem",
 	description: "Insights and tutorials on frontend development.",
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+	const posts = await getAllPosts();
+
 	return (
-		<main className="flex flex-col items-center px-4">
-			<section className="mb-28 max-w-200 scroll-mt-28 text-center">
-				<SectionHeader mb="mb8">My Blog</SectionHeader>
-				<div className="mt-10 flex flex-wrap justify-center gap-10">
-					{blogPosts.map((post) => (
-						<div
+		<main className="flex flex-col items-center px-4 py-20 pb-40">
+			<section className="w-full max-w-5xl scroll-mt-28">
+				<div className="text-center">
+					<SectionHeader mb="mb8">My Blog</SectionHeader>
+					<p className="mt-4 text-gray-600 dark:text-gray-400">
+						Sharing my thoughts on frontend development, mobile apps, and more.
+					</p>
+				</div>
+				<div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+					{posts.map((post) => (
+						<Link
 							key={post.slug}
-							className="group overflow-hidden rounded-lg border border-black/5 bg-gray-100 transition hover:bg-gray-200 sm:max-w-[20rem] dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
+							href={`/blog/${post.slug}`}
+							className="group flex flex-col overflow-hidden rounded-2xl border border-black/5 bg-gray-50 transition-all hover:-translate-y-1 hover:bg-gray-100 hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
 						>
-							<Link href={`/blog/${post.slug}`} className="cursor-pointer">
-								<div className="flex h-full flex-col px-5 pt-4 pb-7 sm:pt-10 sm:pr-2 sm:pl-10">
-									<h3 className="font-semibold text-2xl">{post.title}</h3>
-									<p className="mt-2 text-gray-700 leading-relaxed dark:text-white/70">
-										{post.excerpt}
-									</p>
-									<ul className="mt-4 flex flex-wrap gap-2 sm:mt-auto">
-										{post.tags.map((tag) => (
-											<li
-												className="rounded-full bg-black/70 px-3 py-1 text-[0.7rem] text-white uppercase tracking-wider dark:text-white/70"
-												key={tag}
-											>
-												{tag}
-											</li>
-										))}
-									</ul>
+							<div className="flex flex-1 flex-col p-6 sm:p-8">
+								<div className="flex items-center gap-3 text-gray-500 text-xs dark:text-gray-400">
+									<time dateTime={post.publishDate}>
+										{new Date(post.publishDate).toLocaleDateString("en-US", {
+											month: "short",
+											day: "numeric",
+											year: "numeric",
+										})}
+									</time>
+									<span>&bull;</span>
+									<span>{post.readingTime} min read</span>
 								</div>
-							</Link>
-						</div>
+								<h3 className="mt-4 font-bold text-xl leading-tight transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
+									{post.title}
+								</h3>
+								<p className="mt-3 line-clamp-3 text-gray-600 text-sm leading-relaxed dark:text-gray-400">
+									{post.excerpt}
+								</p>
+								<div className="mt-auto flex flex-wrap gap-2 pt-6">
+									{post.tags.slice(0, 3).map((tag) => (
+										<span
+											key={tag}
+											className="rounded-full bg-black/5 px-2.5 py-1 font-medium text-[0.65rem] text-gray-600 uppercase tracking-wider dark:bg-white/5 dark:text-gray-400"
+										>
+											{tag}
+										</span>
+									))}
+								</div>
+							</div>
+						</Link>
 					))}
 				</div>
 			</section>

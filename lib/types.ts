@@ -4,7 +4,7 @@ import type { links } from "./data";
 export type SectionName = (typeof links)[number]["name"];
 
 export type BlogMetadata = {
-	id: number;
+	id?: number;
 	title: string;
 	slug: string;
 	publishDate: string;
@@ -15,9 +15,9 @@ export type BlogMetadata = {
 	category: string;
 	image?: string;
 	imageAlt?: string;
-	seo: {
-		metaDescription: string;
-		keywords: string[];
+	seo?: {
+		metaDescription?: string;
+		keywords?: string[];
 		canonicalUrl?: string;
 	};
 	lastModified?: string;

@@ -1,25 +1,22 @@
-interface MyButtonProps {
-	className: string;
-	onClick: React.MouseEventHandler<HTMLButtonElement>;
-	ariaLabel?: string;
-	children?: React.ReactNode;
-	type?: "submit" | "button" | "reset";
+import type React from "react";
+import { cn } from "@/lib/utils";
+
+interface MyButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+	className?: string;
 }
 
 const MyButton: React.FC<MyButtonProps> = ({
-	onClick,
 	className,
-	ariaLabel,
 	children,
-	type = "button", // Default to 'button'
+	...props
 }) => {
-	// Your button component logic here
 	return (
 		<button
-			className={className}
-			onClick={onClick}
-			aria-label={ariaLabel}
-			type={type}
+			className={cn(
+				"transition-all duration-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50",
+				className,
+			)}
+			{...props}
 		>
 			{children}
 		</button>

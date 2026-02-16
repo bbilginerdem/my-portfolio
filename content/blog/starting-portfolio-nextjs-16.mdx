@@ -1,0 +1,46 @@
+---
+title: "Starting my Portfolio with Next.js 16"
+publishDate: "2026-01-24T10:00:00Z"
+author: "Behzat Bilgin Erdem"
+excerpt: "How I built this portfolio using the latest Next.js 16 features and React 19."
+readingTime: 5
+tags: ["Next.js", "React", "Portfolio"]
+category: "Development"
+---
+
+# Starting my Portfolio with Next.js 16
+
+Building a portfolio in 2026 is an exciting journey! With the release of **Next.js 16** and **React 19**, the ecosystem has shifted towards more robust server-side features and improved performance.
+
+## Why Next.js 16?
+
+Next.js 16 introduces even better caching mechanisms and a more refined App Router. Combined with **Tailwind CSS v4**, the development experience is faster than ever.
+
+### Key Features Used:
+- **React Server Components (RSC)**: Reducing client-side JavaScript for better SEO.
+- **Tailwind CSS v4**: A faster, zero-runtime CSS engine.
+- **Framer Motion**: Smooth animations that don't compromise performance.
+
+## The Architecture
+
+The architecture of this portfolio is built around a clean, modular structure. Sections like `Intro`, `Projects`, and `Blog` are separated into their own components, making it easy to maintain and scale.
+
+```tsx
+export default function Home() {
+  return (
+    <main>
+      <Intro />
+      <Projects />
+      <Skills />
+      <Blogs />
+      <Contact />
+    </main>
+  );
+}
+```
+
+## Conclusion
+
+This is just the beginning. In the coming months, I'll be adding more features like MDX support (which you are seeing right now!) and deeper integration with Strapi.
+
+Stay tuned for more updates!
