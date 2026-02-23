@@ -2,13 +2,14 @@ import Header from "@/components/layout/Header";
 
 import "./globals.css";
 
-import { DM_Sans } from "next/font/google";
-import type { Metadata } from "next/types";
-import { Toaster } from "sonner";
 import Footer from "@/components/layout/Footer";
 import ThemeSwitch from "@/components/layout/ThemeSwitch";
 import ActiveSectionContextProvider from "@/context/ActiveSectionContextProvider";
 import ThemeContextProvider from "@/context/ThemeContext";
+import { Analytics } from "@vercel/analytics/next";
+import { DM_Sans } from "next/font/google";
+import type { Metadata } from "next/types";
+import { Toaster } from "sonner";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
@@ -36,6 +37,7 @@ export default function RootLayout({
 						{children}
 						<Footer />
 						<Toaster position="top-right" richColors closeButton />
+						<Analytics />
 					</ActiveSectionContextProvider>
 					<ThemeSwitch />
 				</ThemeContextProvider>
