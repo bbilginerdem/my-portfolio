@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Link from "next/link";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { getAllPosts } from "@/lib/blog";
@@ -7,8 +8,16 @@ export const metadata = {
 	description: "Insights and tutorials on frontend development.",
 };
 
-export default async function BlogPage() {
-	const posts = await getAllPosts();
+export default async function BlogPage(props: {
+	searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+	const searchParams = await props.searchParams;
+	const tag =
+		typeof searchParams?.tag === "string" ? searchParams.tag : undefined;
+
+	const allPosts = await getAllPosts();
+	const posts = tag ? allPosts.filter((p) => p.tags.includes(tag)) : allPosts;
+	const allTags = Array.from(new Set(allPosts.flatMap((p) => p.tags)));
 
 	return (
 		<main className="flex flex-col items-center px-4 py-20 pb-40">
@@ -19,6 +28,35 @@ export default async function BlogPage() {
 						Sharing my thoughts on frontend development, mobile apps, and more.
 					</p>
 				</div>
+
+				<div className="mt-10 flex flex-wrap justify-center gap-2">
+					<Link
+						href="/blog"
+						className={clsx(
+							"rounded-full px-4 py-2 font-semibold text-sm transition-colors",
+							!tag
+								? "bg-blue-600 text-white dark:bg-blue-500"
+								: "bg-black/5 text-gray-600 hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10",
+						)}
+					>
+						All
+					</Link>
+					{allTags.map((t) => (
+						<Link
+							key={t}
+							href={`/blog?tag=${t}`}
+							className={clsx(
+								"rounded-full px-4 py-2 font-semibold text-sm transition-colors",
+								tag === t
+									? "bg-blue-600 text-white dark:bg-blue-500"
+									: "bg-black/5 text-gray-600 hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10",
+							)}
+						>
+							{t}
+						</Link>
+					))}
+				</div>
+
 				<div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
 					{posts.map((post) => (
 						<Link

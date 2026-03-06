@@ -9,31 +9,31 @@
 		"lint": "pnpm dlx @biomejs/biome check --write --css-parse-tailwind-directives=true"
 	},
 	"dependencies": {
-		"@shikijs/rehype": "^3.22.0",
+		"@shikijs/rehype": "^4.0.1",
 		"@tailwindcss/typography": "^0.5.19",
 		"@vercel/analytics": "^1.6.1",
 		"clsx": "^2.1.1",
-		"framer-motion": "^12.34.3",
+		"framer-motion": "^12.35.0",
 		"gray-matter": "^4.0.3",
-		"lucide-react": "^0.575.0",
+		"lucide-react": "^0.577.0",
 		"next": "^16.1.6",
 		"next-mdx-remote": "^6.0.0",
 		"react": "^19.2.4",
 		"react-dom": "^19.2.4",
 		"react-intersection-observer": "^10.0.3",
-		"shiki": "^3.22.0",
+		"shiki": "^4.0.1",
 		"sonner": "^2.0.7",
 		"tailwind-merge": "^3.5.0",
 		"typescript": "5.9.3"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.4.4",
-		"@tailwindcss/postcss": "4.2.0",
-		"@types/node": "25.3.0",
+		"@biomejs/biome": "2.4.6",
+		"@tailwindcss/postcss": "4.2.1",
+		"@types/node": "25.3.5",
 		"@types/react": "19.2.14",
 		"@types/react-dom": "19.2.3",
-		"postcss": "8.5.6",
-		"tailwindcss": "4.2.0"
+		"postcss": "8.5.8",
+		"tailwindcss": "4.2.1"
 	},
-	"packageManager": "pnpm@10.30.1"
+	"packageManager": "pnpm@10.30.3"
 }

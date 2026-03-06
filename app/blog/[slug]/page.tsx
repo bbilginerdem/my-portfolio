@@ -2,6 +2,7 @@ import rehypeShiki from "@shikijs/rehype";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import ShareButton from "@/components/blog/ShareButton";
 import { getPostBySlug } from "@/lib/blog";
 
 type Props = Readonly<{
@@ -47,12 +48,13 @@ export default async function BlogPostPage({ params }: Props) {
 				<header className="mb-12 text-pretty">
 					<div className="mb-6 flex flex-wrap items-center gap-3">
 						{post.metadata.tags.map((tag) => (
-							<span
+							<Link
 								key={tag}
-								className="rounded-full bg-blue-500/10 px-3 py-1 font-bold text-[10px] text-blue-600 uppercase tracking-widest dark:text-blue-400"
+								href={`/blog?tag=${tag}`}
+								className="rounded-full bg-blue-500/10 px-3 py-1 font-bold text-[10px] text-blue-600 uppercase tracking-widest transition-colors hover:bg-blue-500/20 dark:text-blue-400 dark:hover:bg-blue-500/20"
 							>
 								{tag}
-							</span>
+							</Link>
 						))}
 					</div>
 					<h1 className="mb-8 font-extrabold text-4xl text-gray-900 leading-[1.1] tracking-tight sm:text-6xl dark:text-white">
@@ -112,20 +114,16 @@ export default async function BlogPostPage({ params }: Props) {
 				<div className="mt-20 flex items-center justify-between border-black/5 border-t pt-10 dark:border-white/5">
 					<div className="flex gap-2">
 						{post.metadata.tags.map((tag) => (
-							<span
+							<Link
 								key={tag}
+								href={`/blog?tag=${tag}`}
 								className="rounded-full bg-black/5 px-4 py-2 font-semibold text-gray-500 text-xs transition-colors hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10"
 							>
 								#{tag}
-							</span>
+							</Link>
 						))}
 					</div>
-					<button
-						className="font-bold text-blue-600 text-sm hover:underline dark:text-blue-400"
-						type="button"
-					>
-						Share Post
-					</button>
+					<ShareButton title={post.metadata.title} />
 				</div>
 			</article>
 		</main>
