@@ -1,4 +1,5 @@
 import Header from "@/components/layout/Header";
+import NextProgressBar from "@/components/ui/NextProgressBar";
 
 import "./globals.css";
 
@@ -33,6 +34,7 @@ export default function RootLayout({
 				<div className="absolute -top-4 -left-140 -z-10 h-200 w-125 rounded-full bg-[#dbd7fb] blur-[10rem] sm:w-275 md:-left-132 lg:-left-112 xl:-left-60 2xl:-left-20 dark:bg-[#676394]" />
 				<ThemeContextProvider>
 					<ActiveSectionContextProvider>
+						<NextProgressBar />
 						<Header />
 						{children}
 						<Footer />
