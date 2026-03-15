@@ -35,7 +35,7 @@ export default async function BlogPostPage({ params }: Props) {
 
 	return (
 		<main className="flex flex-col items-center px-4 py-20">
-			<article className="glass-container mb-28 w-full max-w-3xl overflow-hidden rounded-3xl p-8 text-left shadow-2xl backdrop-blur-xl sm:p-14 dark:bg-black/20">
+			<article className="glass-container mb-28 w-full max-w-5xl overflow-hidden rounded-3xl p-8 text-left shadow-2xl backdrop-blur-xl sm:p-14 dark:bg-black/20">
 				<Link
 					href="/blog"
 					className="group mb-12 flex items-center gap-2 text-gray-500 text-sm transition-colors hover:text-gray-900 dark:hover:text-white"

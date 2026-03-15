@@ -1,0 +1,970 @@
+---
+title: "The Senior Frontend Engineer Interview Gauntlet: 2026 Edition"
+publishDate: "2026-03-15T10:00:00Z"
+author: "Behzat Bilgin Erdem"
+excerpt: "Master the toughest frontend interview questions with deep dives into React, TypeScript, AWS, accessibility, and testing—complete with Shiki-powered code examples."
+readingTime: 25
+tags:
+  - "Interview"
+  - "React"
+  - "TypeScript"
+  - "AWS"
+  - "Testing"
+  - "Accessibility"
+  - "State Management"
+category: "Career"
+---
+
+# The Senior Frontend Engineer Interview Gauntlet: 2026 Edition
+
+The frontend landscape has evolved dramatically. In 2026, senior engineers aren't just expected to build UIs—they must architect scalable systems, optimize performance, bridge the gap between design and backend, and deploy with confidence. This guide compiles the toughest questions you'll face, with detailed answers and code samples rendered beautifully using **Shiki**, the syntax highlighter that powers VS Code.
+
+> Every code block in this post is enhanced with Shiki's capabilities: **twoslash** for inline type hints, **line highlighting**, and **custom themes**. The examples are designed to be both educational and visually clear.
+
+---
+
+## Table of Contents
+
+1. [JavaScript/TypeScript (ES6+) Deep Dive](#javascripttypescript-es6-deep-dive)
+2. [React.js Internals and Performance](#reactjs-internals-and-performance)
+3. [State Management at Scale](#state-management-at-scale)
+4. [AWS Deployment Strategies](#aws-deployment-strategies)
+5. [Accessible and Responsive UI Architecture](#accessible-and-responsive-ui-architecture)
+6. [Testing: From Unit to E2E](#testing-from-unit-to-e2e)
+7. [Conclusion](#conclusion)
+
+---
+
+## JavaScript/TypeScript (ES6+) Deep Dive
+
+### Q1: Implement a Deeply Nested Object Flattener with TypeScript Generics
+
+**Why it's tough:** Tests recursive type inference, conditional types, and complex object manipulation.
+
+**Answer:** A flattening function that converts `{ a: { b: { c: 1 } } }` to `{ 'a.b.c': 1 }` while preserving types.
+
+```ts twoslash
+// TypeScript twoslash shows inferred types inline
+type Flatten<T extends object, Prefix extends string = ''> = {
+  [K in keyof T]: T[K] extends object
+    ? Flatten<T[K], `${Prefix}${K & string}.`>
+    : { [P in `${Prefix}${K & string}`]: T[K] }
+}[keyof T]
+
+function flatten<T extends object>(obj: T): Flatten<T> {
+  const result = {} as Flatten<T>
+
+  function recurse(current: any, path: string[]) {
+    if (current && typeof current === 'object' && !Array.isArray(current)) {
+      for (const key in current) {
+        recurse(current[key], [...path, key])
+      }
+    } else {
+      // @ts-expect-error - dynamic key assignment
+      result[path.join('.')] = current
+    }
+  }
+
+  recurse(obj, [])
+  return result
+}
+
+// Usage with full type safety
+const nested = { a: { b: { c: 42 } }, d: [1, 2] }
+const flat = flatten(nested)
+// flat type is: { 'a.b.c': number } & { d: number[] }
+
+
+**Shiki Feature Highlight:** The `twoslash` annotation adds type information inline, simulating IDE hover experiences.
+
+---
+
+### Q2: Design a Type-Safe Event Emitter
+
+**Why it's tough:** Requires advanced mapped types and understanding of variance.
+
+**Answer:** An event emitter where each event has its own payload type, enforced at compile time.
+
+```ts twoslash title="lib/event-emitter.ts"
+type EventMap = {
+  click: { x: number; y: number }
+  focus: { element: HTMLElement }
+  data: Array<number>
+}
+
+class TypedEmitter<T extends Record<keyof T, any>> {
+  private listeners: {
+    [K in keyof T]?: Array<(payload: T[K]) => void>
+  } = {}
+
+  on<K extends keyof T>(event: K, callback: (payload: T[K]) => void): void {
+    if (!this.listeners[event]) {
+      this.listeners[event] = []
+    }
+    this.listeners[event]!.push(callback)
+  }
+
+  emit<K extends keyof T>(event: K, payload: T[K]): void {
+    this.listeners[event]?.forEach(callback => callback(payload))
+  }
+
+  off<K extends keyof T>(event: K, callback: (payload: T[K]) => void): void {
+    if (!this.listeners[event]) return
+    this.listeners[event] = this.listeners[event]!.filter(cb => cb !== callback)
+  }
+}
+
+// Usage
+const emitter = new TypedEmitter<EventMap>()
+emitter.on('click', ({ x, y }) => console.log(`Clicked at ${x}, ${y}`))
+emitter.emit('click', { x: 100, y: 200 }) // OK
+// emitter.emit('click', { x: 100 }) // Error: missing y
+```
+
+### Q3: Implement `Promise.all` with Concurrency Limit
+
+**Why it's tough:** Combines async control flow, error handling, and dynamic task execution.
+
+**Answer:** A utility that runs promises in batches, respecting a concurrency limit.
+
+```ts twoslash
+async function mapConcurrent<T, R>(
+  items: T[],
+  mapper: (item: T) => Promise<R>,
+  concurrency: number
+): Promise<R[]> {
+  const results: R[] = []
+  const queue = [...items]
+  const workers = Array(concurrency).fill(Promise.resolve())
+
+  const runWorker = async () => {
+    while (queue.length) {
+      const index = items.length - queue.length // current item index
+      const item = queue.shift()!
+      results[index] = await mapper(item)
+    }
+  }
+
+  await Promise.all(workers.map(() => runWorker()))
+  return results
+}
+
+// Example usage
+const fetchUrls = async (urls: string[]) => {
+  const results = await mapConcurrent(
+    urls,
+    async (url) => {
+      const res = await fetch(url)
+      return res.json()
+    },
+    3 // max 3 concurrent requests
+  )
+  return results
+}
+```
+
+---
+
+## React.js Internals and Performance
+
+### Q4: Explain React's Concurrent Rendering and `useTransition`
+
+**Why it's tough:** Requires understanding of React's internal priority scheduling and how to avoid UI jank.
+
+**Answer:** Concurrent rendering allows React to interrupt long-running renders to handle high-priority updates. `useTransition` marks a state update as low priority, keeping the UI responsive.
+
+```tsx twoslash
+import { useState, useTransition } from 'react'
+
+// Simulated expensive search
+function mockSearch(query: string): string[] {
+  const items = Array.from({ length: 10000 }, (_, i) => `Item ${i}`)
+  return items.filter(item => item.includes(query))
+}
+
+export function SearchResults() {
+  const [query, setQuery] = useState('')
+  const [results, setResults] = useState<string[]>([])
+  const [isPending, startTransition] = useTransition()
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    // Immediate update for input
+    setQuery(value)
+
+    // Defer expensive filtering
+    startTransition(() => {
+      const filtered = mockSearch(value)
+      setResults(filtered)
+    })
+  }
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={query}
+        onChange={handleChange}
+        placeholder="Search..."
+      />
+      {isPending && <div>Loading results...</div>}
+      <ul>
+        {results.slice(0, 20).map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+```
+
+**Key points:**
+- `useTransition` returns `isPending` (boolean) and `startTransition` (function).
+- State updates inside `startTransition` are marked as low priority.
+- React can interrupt the rendering of `results` if a higher-priority update (like typing) comes in.
+
+### Q5: Build a Custom Hook for Media Queries with SSR Support
+
+**Why it's tough:** Must handle server-side rendering (no `window`) and client-side hydration correctly.
+
+**Answer:** A hook that listens to a media query and returns its match status, with a default for SSR.
+
+```tsx twoslash
+import { useState, useEffect } from 'react'
+
+export function useMediaQuery(query: string, defaultMatches = false): boolean {
+  const [matches, setMatches] = useState(defaultMatches)
+
+  useEffect(() => {
+    const media = window.matchMedia(query)
+    const listener = (e: MediaQueryListEvent) => setMatches(e.matches)
+
+    // Set initial value
+    setMatches(media.matches)
+
+    media.addEventListener('change', listener)
+    return () => media.removeEventListener('change', listener)
+  }, [query])
+
+  return matches
+}
+
+// Usage
+function ResponsiveComponent() {
+  const isMobile = useMediaQuery('(max-width: 768px)')
+  return <div>{isMobile ? 'Mobile view' : 'Desktop view'}</div>
+}
+```
+
+**SSR note:** Pass `defaultMatches` based on user agent or layout assumption to avoid hydration mismatch.
+
+### Q6: Implement a Virtualized List from Scratch
+
+**Why it's tough:** Tests understanding of scroll events, DOM measurements, and performance optimization.
+
+**Answer:** A simple virtualized list that only renders visible items.
+
+```tsx twoslash
+import { useState, useEffect, useRef } from 'react'
+
+interface VirtualizedListProps<T> {
+  items: T[]
+  height: number
+  itemHeight: number
+  renderItem: (item: T, index: number) => React.ReactNode
+}
+
+export function VirtualizedList<T>({
+  items,
+  height,
+  itemHeight,
+  renderItem
+}: VirtualizedListProps<T>) {
+  const [scrollTop, setScrollTop] = useState(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const totalHeight = items.length * itemHeight
+  const startIndex = Math.floor(scrollTop / itemHeight)
+  const endIndex = Math.min(
+    items.length - 1,
+    Math.ceil((scrollTop + height) / itemHeight)
+  )
+
+  const visibleItems = items.slice(startIndex, endIndex + 1)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current) {
+        setScrollTop(containerRef.current.scrollTop)
+      }
+    }
+    const container = containerRef.current
+    container?.addEventListener('scroll', handleScroll)
+    return () => container?.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  return (
+    <div
+      ref={containerRef}
+      style={{ height, overflowY: 'auto', position: 'relative' }}
+    >
+      <div style={{ height: totalHeight, position: 'relative' }}>
+        {visibleItems.map((item, index) => (
+          <div
+            key={startIndex + index}
+            style={{
+              position: 'absolute',
+              top: (startIndex + index) * itemHeight,
+              height: itemHeight,
+              width: '100%'
+            }}
+          >
+            {renderItem(item, startIndex + index)}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+---
+
+## State Management at Scale
+
+### Q7: Compare Zustand, Redux Toolkit, and Jotai. Build a Global Cart Store with Zustand
+
+**Why it's tough:** Requires understanding of different state management paradigms (flux, atomic, proxy) and their trade-offs.
+
+**Answer:** Zustand is minimal and uses a hook with mutable updates via Immer. Redux Toolkit is more opinionated with slices and thunks. Jotai is atomic and modular. Here's a cart store using Zustand:
+
+```ts twoslash
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+interface CartItem {
+  id: string
+  name: string
+  price: number
+  quantity: number
+}
+
+interface CartStore {
+  items: CartItem[]
+  addItem: (item: Omit<CartItem, 'quantity'>) => void
+  removeItem: (id: string) => void
+  updateQuantity: (id: string, quantity: number) => void
+  total: () => number
+}
+
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      addItem: (item) => {
+        const items = get().items
+        const existing = items.find(i => i.id === item.id)
+        if (existing) {
+          set({
+            items: items.map(i =>
+              i.id === item.id
+                ? { ...i, quantity: i.quantity + 1 }
+                : i
+            )
+          })
+        } else {
+          set({ items: [...items, { ...item, quantity: 1 }] })
+        }
+      },
+      removeItem: (id) => {
+        set({ items: get().items.filter(i => i.id !== id) })
+      },
+      updateQuantity: (id, quantity) => {
+        set({
+          items: get().items.map(i =>
+            i.id === id ? { ...i, quantity } : i
+          )
+        })
+      },
+      total: () => {
+        return get().items.reduce(
+          (sum, i) => sum + i.price * i.quantity,
+          0
+        )
+      }
+    }),
+    { name: 'cart-storage' }
+  )
+)
+```
+
+**Usage in component:**
+
+```tsx
+function Cart() {
+  const { items, total, removeItem } = useCartStore()
+  return (
+    <div>
+      {items.map(item => (
+        <div key={item.id}>
+          {item.name} x{item.quantity} - ${item.price * item.quantity}
+          <button onClick={() => removeItem(item.id)}>Remove</button>
+        </div>
+      ))}
+      <div>Total: ${total()}</div>
+    </div>
+  )
+}
+```
+
+### Q8: Handle Complex State Shapes with Immer and TypeScript
+
+**Why it's tough:** Immer allows mutable updates but requires proper typing for nested structures.
+
+**Answer:** Using Immer with Zustand or Redux to update deeply nested state immutably.
+
+```ts twoslash
+import { produce } from 'immer'
+
+interface State {
+  user: {
+    profile: {
+      name: string
+      address: {
+        street: string
+        city: string
+      }
+    }
+    preferences: {
+      theme: 'light' | 'dark'
+    }
+  }
+}
+
+const state: State = {
+  user: {
+    profile: {
+      name: 'John',
+      address: {
+        street: '123 Main St',
+        city: 'Anytown'
+      }
+    },
+    preferences: {
+      theme: 'light'
+    }
+  }
+}
+
+// Without Immer (deep clone needed)
+const newState1 = {
+  ...state,
+  user: {
+    ...state.user,
+    profile: {
+      ...state.user.profile,
+      address: {
+        ...state.user.profile.address,
+        city: 'New City'
+      }
+    }
+  }
+}
+
+// With Immer
+const newState2 = produce(state, draft => {
+  draft.user.profile.address.city = 'New City'
+})
+```
+
+**TypeScript ensures the draft has the same type as the original, so updates are type-safe.**
+
+---
+
+## AWS Deployment Strategies
+
+### Q9: Design a CI/CD Pipeline for a Next.js App on AWS
+
+**Why it's tough:** Tests knowledge of AWS services (CodePipeline, CodeBuild, S3, CloudFront) and how they fit with Next.js.
+
+**Answer:** Use AWS Amplify for simplicity, or build a custom pipeline with S3 + CloudFront + Lambda@Edge for SSR.
+
+```yaml
+# amplify.yml (Amplify Console)
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+```
+
+**Custom pipeline with CodePipeline:**
+1. **Source:** GitHub connected to CodePipeline.
+2. **Build:** CodeBuild runs `next build` and `next export` for static pages, plus prepares serverless functions.
+3. **Deploy:**
+   - Static assets (/\_next/static, public) to S3, served via CloudFront.
+   - SSR pages and API routes deployed as Lambda functions via Serverless Framework or SST.
+   - CloudFront distributions with multiple origins (S3 for static, Lambda for dynamic).
+
+### Q10: Implement a Serverless Function with Lambda and API Gateway for a Frontend Feature
+
+**Why it's tough:** Requires understanding of Lambda invocation, API Gateway integration, and CORS.
+
+**Answer:** A simple contact form handler using Lambda and API Gateway.
+
+```typescript
+// lambda/contact.ts
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
+import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses'
+
+const ses = new SESClient({ region: process.env.AWS_REGION })
+
+export const handler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
+  try {
+    const body = JSON.parse(event.body || '{}')
+    const { name, email, message } = body
+
+    // Validate
+    if (!name || !email || !message) {
+      return {
+        statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        },
+        body: JSON.stringify({ error: 'Missing fields' })
+      }
+    }
+
+    // Send email via SES
+    const command = new SendEmailCommand({
+      Source: 'noreply@example.com',
+      Destination: { ToAddresses: ['support@example.com'] },
+      Message: {
+        Subject: { Data: `Contact from ${name}` },
+        Body: { Text: { Data: `From: ${email}\n\n${message}` } }
+      }
+    })
+    await ses.send(command)
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      },
+      body: JSON.stringify({ success: true })
+    }
+  } catch (error) {
+    console.error(error)
+    return {
+      statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      },
+      body: JSON.stringify({ error: 'Internal server error' })
+    }
+  }
+}
+```
+
+**Frontend call:**
+
+```tsx
+async function submitForm(data: { name: string; email: string; message: string }) {
+  const res = await fetch('https://api.example.com/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  return res.json()
+}
+```
+
+---
+
+## Accessible and Responsive UI Architecture
+
+### Q11: Build an Accessible Modal Component with Focus Trap and ARIA Attributes
+
+**Why it's tough:** Accessibility (a11y) requires managing focus, announcing content, and keyboard interactions.
+
+**Answer:** A modal that traps focus, restores focus on close, and includes proper ARIA roles.
+
+```tsx twoslash
+import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
+
+interface ModalProps {
+  isOpen: boolean
+  onClose: () => void
+  title: string
+  children: React.ReactNode
+}
+
+export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null)
+  const previousFocus = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    if (isOpen) {
+      // Store the currently focused element
+      previousFocus.current = document.activeElement as HTMLElement
+
+      // Focus the modal
+      modalRef.current?.focus()
+
+      // Trap focus inside modal
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onClose()
+        }
+        if (e.key === 'Tab') {
+          const focusableElements = modalRef.current?.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          )
+          if (!focusableElements?.length) return
+
+          const first = focusableElements[0] as HTMLElement
+          const last = focusableElements[focusableElements.length - 1] as HTMLElement
+
+          if (e.shiftKey) {
+            if (document.activeElement === first) {
+              last.focus()
+              e.preventDefault()
+            }
+          } else {
+            if (document.activeElement === last) {
+              first.focus()
+              e.preventDefault()
+            }
+          }
+        }
+      }
+
+      document.addEventListener('keydown', handleKeyDown)
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown)
+        // Restore focus
+        previousFocus.current?.focus()
+      }
+    }
+  }, [isOpen, onClose])
+
+  if (!isOpen) return null
+
+  return createPortal(
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+      ref={modalRef}
+      tabIndex={-1}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'rgba(0,0,0,0.5)'
+      }}
+    >
+      <div
+        role="document"
+        style={{
+          background: 'white',
+          padding: '20px',
+          borderRadius: '8px',
+          maxWidth: '500px',
+          width: '100%'
+        }}
+      >
+        <h2>{title}</h2>
+        {children}
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>,
+    document.body
+  )
+}
+```
+
+### Q12: Create a Responsive Layout System with CSS Grid and Container Queries
+
+**Why it's tough:** Modern responsive design goes beyond media queries; container queries allow component-based responsiveness.
+
+**Answer:** A card grid that adapts based on container width, not viewport.
+
+```css
+/* styles.css */
+.card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  container-type: inline-size;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Container query: when the grid container is wider than 600px */
+@container (min-width: 600px) {
+  .card {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .card-image {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* Fallback for older browsers */
+@supports not (container-type: inline-size) {
+  @media (min-width: 768px) {
+    .card {
+      display: flex;
+    }
+  }
+}
+```
+
+**React component:**
+
+```tsx
+export function CardGrid() {
+  const items = [1,2,3,4,5]
+  return (
+    <div className="card-grid">
+      {items.map(i => (
+        <div key={i} className="card">
+          <img src={`/img${i}.jpg`} alt="" className="card-image" />
+          <div className="card-content">
+            <h3>Card {i}</h3>
+            <p>Description...</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+---
+
+## Testing: From Unit to E2E
+
+### Q13: Write Comprehensive Tests for a Complex Component Using React Testing Library and Jest
+
+**Why it's tough:** Tests must cover user interactions, async behavior, and accessibility.
+
+**Answer:** Testing a login form with validation and error states.
+
+```tsx twoslash
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { LoginForm } from './LoginForm'
+
+// Mock the API call
+jest.mock('../api/auth', () => ({
+  login: jest.fn()
+}))
+
+import { login } from '../api/auth'
+
+describe('LoginForm', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('renders all fields and submit button', () => {
+    render(<LoginForm />)
+
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /log in/i })).toBeInTheDocument()
+  })
+
+  it('shows validation errors when fields are empty', async () => {
+    render(<LoginForm />)
+
+    await userEvent.click(screen.getByRole('button', { name: /log in/i }))
+
+    expect(await screen.findByText(/email is required/i)).toBeInTheDocument()
+    expect(await screen.findByText(/password is required/i)).toBeInTheDocument()
+    expect(login).not.toHaveBeenCalled()
+  })
+
+  it('calls login API with correct values', async () => {
+    const mockLogin = login as jest.Mock
+    mockLogin.mockResolvedValueOnce({ success: true })
+
+    render(<LoginForm />)
+
+    await userEvent.type(screen.getByLabelText(/email/i), 'test@example.com')
+    await userEvent.type(screen.getByLabelText(/password/i), 'password123')
+    await userEvent.click(screen.getByRole('button', { name: /log in/i }))
+
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith({
+        email: 'test@example.com',
+        password: 'password123'
+      })
+    })
+
+    expect(screen.queryByText(/invalid/i)).not.toBeInTheDocument()
+  })
+
+  it('displays error message on failed login', async () => {
+    const mockLogin = login as jest.Mock
+    mockLogin.mockRejectedValueOnce(new Error('Invalid credentials'))
+
+    render(<LoginForm />)
+
+    await userEvent.type(screen.getByLabelText(/email/i), 'test@example.com')
+    await userEvent.type(screen.getByLabelText(/password/i), 'wrong')
+    await userEvent.click(screen.getByRole('button', { name: /log in/i }))
+
+    expect(await screen.findByText(/invalid credentials/i)).toBeInTheDocument()
+  })
+
+  it('disables button while submitting', async () => {
+    const mockLogin = login as jest.Mock
+    mockLogin.mockImplementationOnce(() => new Promise(resolve => setTimeout(resolve, 100)))
+
+    render(<LoginForm />)
+
+    await userEvent.type(screen.getByLabelText(/email/i), 'test@example.com')
+    await userEvent.type(screen.getByLabelText(/password/i), 'password123')
+
+    const button = screen.getByRole('button', { name: /log in/i })
+    await userEvent.click(button)
+
+    expect(button).toBeDisabled()
+    expect(screen.getByText(/logging in/i)).toBeInTheDocument()
+
+    await waitFor(() => expect(button).not.toBeDisabled())
+  })
+})
+```
+
+### Q14: Set Up Cypress for E2E Testing with Custom Commands and CI Integration
+
+**Why it's tough:** E2E tests require realistic scenarios, network mocking, and integration into CI pipelines.
+
+**Answer:** Cypress configuration with custom commands and GitHub Actions.
+
+```typescript
+// cypress/support/commands.ts
+declare namespace Cypress {
+  interface Chainable {
+    login(email: string, password: string): Chainable<void>
+    resetDatabase(): Chainable<void>
+  }
+}
+
+Cypress.Commands.add('login', (email: string, password: string) => {
+  cy.session([email, password], () => {
+    cy.visit('/login')
+    cy.get('[data-cy=email]').type(email)
+    cy.get('[data-cy=password]').type(password)
+    cy.get('[data-cy=submit]').click()
+    cy.url().should('include', '/dashboard')
+  })
+})
+
+Cypress.Commands.add('resetDatabase', () => {
+  cy.exec('npm run db:reset') // or call API endpoint
+})
+```
+
+```typescript
+// cypress/e2e/cart.cy.ts
+describe('Shopping Cart', () => {
+  beforeEach(() => {
+    cy.resetDatabase()
+    cy.login('user@example.com', 'password')
+  })
+
+  it('adds item to cart and completes checkout', () => {
+    cy.visit('/products')
+    cy.contains('Product 1').click()
+    cy.get('[data-cy=add-to-cart]').click()
+    cy.get('[data-cy=cart-count]').should('contain', '1')
+
+    cy.get('[data-cy=cart-icon]').click()
+    cy.url().should('include', '/cart')
+    cy.contains('Product 1').should('be.visible')
+
+    cy.get('[data-cy=checkout]').click()
+    cy.url().should('include', '/checkout')
+
+    cy.get('[data-cy=address]').type('123 Main St')
+    cy.get('[data-cy=payment]').select('Credit Card')
+    cy.get('[data-cy=submit-order]').click()
+
+    cy.contains('Order confirmed').should('be.visible')
+  })
+})
+```
+
+**CI Integration (GitHub Actions):**
+
+```yaml
+# .github/workflows/e2e.yml
+name: E2E Tests
+on: [push]
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Start app
+        run: npm run dev &
+      - name: Wait for app to be ready
+        run: npx wait-on http://localhost:3000
+      - name: Run Cypress
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headed: false
+```
+
+---
+
+## Conclusion
+
+The role of a senior frontend engineer in 2026 demands a holistic skill set that spans deep JavaScript/TypeScript knowledge, React mastery, state management expertise, AWS deployment capabilities, accessibility-first design, and rigorous testing. These interview questions are designed to probe not just what you know, but how you think about architecture, performance, and collaboration.
+
+Remember: **"The better the instructions, the better the execution. Precision is the new productivity."** Whether you're building reusable hooks, designing scalable state, or deploying to the cloud, clarity and intentionality set senior engineers apart.
+
+Stay curious, stay agentic, and ace that interview!
+
+---
+*Behzat Bilgin Erdem
+```

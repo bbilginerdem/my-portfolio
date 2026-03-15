@@ -29,11 +29,13 @@ export default function ThemeContextProvider({
 	const [theme, setTheme] = useState<Theme>("dark");
 
 	useEffect(() => {
-		const localTheme = globalThis.localStorage.getItem("theme") as Theme | null;
-
-		if (localTheme) {
-			setTheme(localTheme);
-			if (localTheme === "dark") {
+		const isValidTheme = (value: string | null): value is Theme => {
+			return value === "light" || value === "dark";
+		};
+		const storedTheme = localStorage.getItem("theme");
+		if (isValidTheme(storedTheme)) {
+			setTheme(storedTheme);
+			if (storedTheme === "dark") {
 				document.documentElement.classList.add("dark");
 			} else {
 				document.documentElement.classList.remove("dark");
@@ -45,6 +47,26 @@ export default function ThemeContextProvider({
 			setTheme("light");
 			document.documentElement.classList.remove("dark");
 		}
+
+		const mediaQuery = globalThis.matchMedia("(prefers-color-scheme: dark)");
+
+		const handleChange = (e: MediaQueryListEvent) => {
+			const systemTheme = e.matches ? "dark" : "light";
+			if (!globalThis.localStorage.getItem("theme")) {
+				setTheme(systemTheme);
+				if (systemTheme === "dark") {
+					document.documentElement.classList.add("dark");
+				} else {
+					document.documentElement.classList.remove("dark");
+				}
+			}
+		};
+
+		mediaQuery.addEventListener("change", handleChange);
+
+		return () => {
+			mediaQuery.removeEventListener("change", handleChange);
+		};
 	}, []);
 
 	const toggleTheme = useCallback(() => {
