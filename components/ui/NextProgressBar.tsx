@@ -51,7 +51,7 @@ function ProgressBarInner() {
 			aria-valuenow={progress}
 			aria-valuemin={0}
 			aria-valuemax={100}
-			className="fixed top-0 right-0 left-0 z-[9999] h-[2.5px] w-full"
+			className="fixed top-0 right-0 left-0 z-9999 h-[2.5px] w-full"
 			style={{
 				opacity: isComplete ? 0 : 1,
 				transition: "opacity 300ms ease-in-out",
@@ -60,7 +60,7 @@ function ProgressBarInner() {
 			{/* The Bar */}
 			<div
 				className={
-					"h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] transition-all duration-500 ease-out dark:from-indigo-400 dark:via-fuchsia-400 dark:to-rose-400"
+					"h-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] transition-all duration-500 ease-out dark:from-indigo-400 dark:via-fuchsia-400 dark:to-rose-400"
 				}
 				style={{
 					width: `${progress}%`,

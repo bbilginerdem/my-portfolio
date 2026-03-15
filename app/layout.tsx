@@ -11,6 +11,7 @@ import Footer from "@/components/layout/Footer";
 import ThemeSwitch from "@/components/layout/ThemeSwitch";
 import ActiveSectionContextProvider from "@/context/ActiveSectionContextProvider";
 import ThemeContextProvider from "@/context/ThemeContext";
+import { getRecentPostsInfo } from "@/lib/content";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
@@ -20,11 +21,13 @@ export const metadata: Metadata = {
 		"Behzat Bilgin is a frontend developer based in Ankara, Turkey with +5 years of experience.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const { hasRecent, count } = await getRecentPostsInfo();
+
 	return (
 		<html lang="en" className="scroll-smooth!">
 			<body
@@ -35,7 +38,7 @@ export default function RootLayout({
 				<ThemeContextProvider>
 					<ActiveSectionContextProvider>
 						<NextProgressBar />
-						<Header />
+						<Header hasNewBlogContent={hasRecent} recentPostCount={count} />
 						{children}
 						<Footer />
 						<Toaster position="top-right" richColors closeButton />

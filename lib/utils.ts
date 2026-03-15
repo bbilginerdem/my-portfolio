@@ -28,3 +28,27 @@ export const getErrorMessage = (error: unknown) => {
 
 	return message;
 };
+
+/**
+ * Checks if content is new (published within last 7 days)
+ * @param dateString - ISO date string or Date object
+ * @returns true if content is new, false otherwise
+ */
+export function isNewContent(dateString: string | Date): boolean {
+	try {
+		const date = new Date(dateString);
+
+		// Check if date is valid
+		if (Number.isNaN(date.getTime())) {
+			return false;
+		}
+
+		const now = new Date();
+		const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+		const timeDiff = now.getTime() - date.getTime();
+
+		return timeDiff >= 0 && timeDiff <= sevenDaysInMs;
+	} catch {
+		return false;
+	}
+}
