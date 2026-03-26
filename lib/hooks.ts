@@ -44,7 +44,7 @@ export function useNavigationProgress(
 		const handleClick = (e: MouseEvent) => {
 			const target = e.target as HTMLElement;
 			const anchor = target.closest("a");
-			if (!anchor || !anchor.href) return;
+			if (!anchor?.href) return;
 
 			const currentUrl = new URL(window.location.href);
 			const targetUrl = new URL(anchor.href, window.location.origin);

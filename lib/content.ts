@@ -2,10 +2,7 @@
 import { getAllPosts } from "@/lib/blog";
 import { isNewContent } from "@/lib/utils";
 
-/**
- * Check if any blog posts were published within the last 7 days
- */
-export async function hasRecentPosts(days = 7): Promise<boolean> {
+export async function hasRecentPosts(): Promise<boolean> {
 	try {
 		const posts = await getAllPosts();
 		return posts.some((post) => isNewContent(post.publishDate));
@@ -17,7 +14,7 @@ export async function hasRecentPosts(days = 7): Promise<boolean> {
 /**
  * Get count of posts published within the last N days
  */
-export async function getRecentPostCount(days = 7): Promise<number> {
+export async function getRecentPostCount(): Promise<number> {
 	try {
 		const posts = await getAllPosts();
 		return posts.filter((post) => isNewContent(post.publishDate)).length;
@@ -29,7 +26,7 @@ export async function getRecentPostCount(days = 7): Promise<number> {
 /**
  * Get both flag and count in one call (more efficient)
  */
-export async function getRecentPostsInfo(days = 7): Promise<{
+export async function getRecentPostsInfo(): Promise<{
 	hasRecent: boolean;
 	count: number;
 }> {
