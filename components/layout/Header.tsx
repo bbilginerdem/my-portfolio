@@ -26,16 +26,16 @@ export default function Header({
 	return (
 		<header className="relative z-999">
 			<motion.div
-				className="fixed top-0 left-1/2 h-14 w-full rounded-none border border-white border-opacity-40 bg-white bg-opacity-80 shadow-black/3 shadow-lg backdrop-blur-sm sm:top-6 sm:h-13 sm:w-lg sm:rounded-full dark:border-black/40 dark:bg-gray-900 dark:bg-opacity-75"
+				className="fixed top-0 left-1/2 hidden h-14 w-full rounded-none border border-white border-opacity-40 bg-white bg-opacity-80 shadow-black/3 shadow-lg backdrop-blur-sm sm:top-6 sm:block sm:h-13 sm:w-lg sm:rounded-full dark:border-black/40 dark:bg-gray-900 dark:bg-opacity-75"
 				initial={{ y: -100, x: "-50%", opacity: 0 }}
 				animate={{ y: 0, x: "-50%", opacity: 1 }}
 			/>
 
 			{/* Mobile Icon */}
 			<motion.div
-				className="fixed top-0 left-1/2 flex h-14 w-full -translate-x-1/2 items-center justify-end px-4 sm:hidden"
-				initial={{ y: -100, x: "-50%", opacity: 0 }}
-				animate={{ y: 0, x: "-50%", opacity: 1 }}
+				className="fixed top-4 right-4 z-50 flex items-center justify-end sm:hidden"
+				initial={{ y: -100, opacity: 0 }}
+				animate={{ y: 0, opacity: 1 }}
 			>
 				<button
 					type="button"
@@ -102,7 +102,7 @@ export default function Header({
 						initial={{ opacity: 0, y: -20 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -20, transition: { duration: 0.15 } }}
-						className="fixed top-14 left-0 w-full rounded-b-2xl border-black/10 border-b bg-white/95 px-4 py-6 shadow-xl backdrop-blur-md sm:hidden dark:border-white/10 dark:bg-gray-900/95"
+						className="fixed top-16 left-0 w-full rounded-b-2xl border-black/10 border-b bg-white/95 px-4 py-6 shadow-xl backdrop-blur-md sm:hidden dark:border-white/10 dark:bg-gray-900/95"
 					>
 						<ul className="flex flex-col items-center justify-center gap-6 font-medium text-[1.1rem] text-gray-500">
 							{links.map((link) => (
