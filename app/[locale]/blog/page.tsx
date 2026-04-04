@@ -1,21 +1,38 @@
 import clsx from "clsx";
-import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import SectionHeader from "@/components/ui/SectionHeader";
+import { Link } from "@/i18n/navigation";
+import { type Locale, routing } from "@/i18n/routing";
 import { getAllPosts } from "@/lib/blog";
 
-export const metadata = {
-	title: "Blog | Behzat Bilgin Erdem",
-	description: "Insights and tutorials on frontend development.",
+type Props = {
+	params: Promise<{ locale: string }>;
+	searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default async function BlogPage(props: {
-	searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
+export async function generateMetadata(props: Props) {
+	const { locale } = await props.params;
+	const t = await getTranslations({ locale, namespace: "Blog" });
+	return {
+		title: `${t("title")} | Behzat Bilgin Erdem`,
+		description: t("description"),
+	};
+}
+
+export default async function BlogPage(props: Props) {
+	const { locale } = await props.params;
+	if (!routing.locales.includes(locale as Locale)) {
+		notFound();
+	}
+	setRequestLocale(locale);
+	const t = await getTranslations("Blog");
+
 	const searchParams = await props.searchParams;
 	const tag =
 		typeof searchParams?.tag === "string" ? searchParams.tag : undefined;
 
-	const allPosts = await getAllPosts();
+	const allPosts = await getAllPosts(locale);
 	const posts = tag ? allPosts.filter((p) => p.tags.includes(tag)) : allPosts;
 	const allTags = Array.from(new Set(allPosts.flatMap((p) => p.tags)));
 
@@ -23,9 +40,9 @@ export default async function BlogPage(props: {
 		<main className="flex flex-col items-center px-4 py-20 pb-40">
 			<section className="w-full max-w-5xl scroll-mt-28">
 				<div className="text-center">
-					<SectionHeader mb="mb8">My Blog</SectionHeader>
+					<SectionHeader mb="mb8">{t("title")}</SectionHeader>
 					<p className="mt-4 text-gray-600 dark:text-gray-400">
-						Sharing my thoughts on frontend development, mobile apps, and more.
+						{t("description")}
 					</p>
 				</div>
 
@@ -39,7 +56,7 @@ export default async function BlogPage(props: {
 								: "bg-black/5 text-gray-600 hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10",
 						)}
 					>
-						All
+						{t("all")}
 					</Link>
 					{allTags.map((t) => (
 						<Link
@@ -74,7 +91,9 @@ export default async function BlogPage(props: {
 										})}
 									</time>
 									<span>&bull;</span>
-									<span>{post.readingTime} min read</span>
+									<span>
+										{post.readingTime} {t("minRead")}
+									</span>
 								</div>
 								<h3 className="mt-4 font-bold text-xl leading-tight transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
 									{post.title}

@@ -1,0 +1,11 @@
+{
+	"Blog": {
+		"title": "My Blog",
+		"description": "Sharing my thoughts on frontend development, mobile apps, and more.",
+		"all": "All",
+		"backToBlogs": "Back to all blogs",
+		"published": "Published",
+		"readTime": "Read Time",
+		"minRead": "min read"
+	}
+}

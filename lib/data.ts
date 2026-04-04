@@ -7,23 +7,23 @@ import nextArbImg from "@/public/images/nexarb.png";
 export const links = [
 	{
 		name: "Home",
-		hash: "#home",
+		hash: "/#home",
 	},
 	{
 		name: "Projects",
-		hash: "#projects",
+		hash: "/#projects",
 	},
 	{
 		name: "Skills",
-		hash: "#skills",
+		hash: "/#skills",
 	},
 	{
 		name: "Contact",
-		hash: "#contact",
+		hash: "/#contact",
 	},
 	{
 		name: "Blog",
-		hash: "blog",
+		hash: "/blog",
 	},
 ] as const;
 

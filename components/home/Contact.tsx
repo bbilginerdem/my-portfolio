@@ -5,7 +5,6 @@ import { Check, Copy, Mail } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useSectionInView } from "@/lib/hooks";
-import { GitHubIcon, LinkedInIcon } from "../ui/Icons";
 import SectionHeading from "../ui/SectionHeader";
 
 export default function Contact() {
@@ -72,44 +71,6 @@ export default function Contact() {
 								Copy Address
 							</span>
 						</button>
-					</div>
-
-					{/* Socials Divider */}
-					<div className="my-8 flex items-center gap-4 text-gray-300 dark:text-white/10">
-						<div className="h-px flex-1 bg-current" />
-						<span className="font-bold text-[10px] uppercase tracking-[0.2em]">
-							Socials
-						</span>
-						<div className="h-px flex-1 bg-current" />
-					</div>
-
-					{/* Social Links */}
-					<div className="flex justify-center gap-6">
-						<a
-							className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition hover:scale-110 hover:border-black hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/10"
-							href="https://www.linkedin.com/in/bbilginerdem/"
-							target="_blank"
-							rel="noreferrer"
-							title="LinkedIn profile"
-						>
-							<LinkedInIcon
-								size={22}
-								className="text-gray-700 dark:text-white/80"
-							/>
-						</a>
-
-						<a
-							className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition hover:scale-110 hover:border-black hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/10"
-							href="https://github.com/bbilginerdem"
-							target="_blank"
-							rel="noreferrer"
-							title="GitHub profile"
-						>
-							<GitHubIcon
-								size={22}
-								className="text-gray-700 dark:text-white/80"
-							/>
-						</a>
 					</div>
 				</div>
 

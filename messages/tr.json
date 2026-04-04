@@ -1,0 +1,11 @@
+{
+	"Blog": {
+		"title": "Blog",
+		"description": "Frontend geliştirme, mobil uygulamalar ve daha fazlası hakkında yazılarım.",
+		"all": "Tümü",
+		"backToBlogs": "Tüm yazılara dön",
+		"published": "Yayınlanma",
+		"readTime": "Okuma Süresi",
+		"minRead": "dk okuma"
+	}
+}

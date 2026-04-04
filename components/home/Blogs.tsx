@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useSectionInView } from "@/lib/hooks";
 import type { BlogMetadata } from "@/lib/types";
 import SectionHeader from "../ui/SectionHeader";

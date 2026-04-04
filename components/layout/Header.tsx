@@ -3,8 +3,8 @@
 
 import { clsx } from "clsx";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { useActiveSectionContext } from "@/context/ActiveSectionContextProvider";
+import { Link } from "@/i18n/navigation";
 import { links } from "@/lib/data";
 
 type HeaderProps = {

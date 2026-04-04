@@ -5,10 +5,10 @@ import type { BlogMetadata } from "./types";
 
 const BLOG_DIRECTORY = path.resolve(process.cwd(), "content/blog");
 
-export async function getPostBySlug(slug: string) {
+export async function getPostBySlug(slug: string, locale = "en") {
 	try {
 		const realSlug = slug.replace(/\.mdx$/, "");
-		const filePath = path.resolve(BLOG_DIRECTORY, `${realSlug}.mdx`);
+		const filePath = path.resolve(BLOG_DIRECTORY, locale, `${realSlug}.mdx`);
 
 		if (!fs.existsSync(filePath)) {
 			console.warn(`File not found: ${filePath}`);
@@ -31,18 +31,19 @@ export async function getPostBySlug(slug: string) {
 	}
 }
 
-export async function getAllPosts() {
+export async function getAllPosts(locale = "en") {
 	try {
-		if (!fs.existsSync(BLOG_DIRECTORY)) {
-			console.warn(`Blog directory not found: ${BLOG_DIRECTORY}`);
+		const localeDir = path.resolve(BLOG_DIRECTORY, locale);
+		if (!fs.existsSync(localeDir)) {
+			console.warn(`Blog directory not found: ${localeDir}`);
 			return [];
 		}
 
-		const files = fs.readdirSync(BLOG_DIRECTORY);
+		const files = fs.readdirSync(localeDir);
 		const posts = files
 			.filter((file) => file.endsWith(".mdx"))
 			.map((file) => {
-				const filePath = path.resolve(BLOG_DIRECTORY, file);
+				const filePath = path.resolve(localeDir, file);
 				const fileContent = fs.readFileSync(filePath, "utf-8");
 				const { data } = matter(fileContent);
 				return {

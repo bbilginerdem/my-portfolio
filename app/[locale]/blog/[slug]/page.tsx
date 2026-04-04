@@ -1,17 +1,19 @@
 import rehypeShiki from "@shikijs/rehype";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import ShareButton from "@/components/blog/ShareButton";
+import { Link } from "@/i18n/navigation";
+import { type Locale, routing } from "@/i18n/routing";
 import { getPostBySlug } from "@/lib/blog";
 
 type Props = Readonly<{
-	params: Promise<{ slug: string }>;
+	params: Promise<{ slug: string; locale: string }>;
 }>;
 
 export async function generateMetadata({ params }: Props) {
-	const { slug } = await params;
-	const post = await getPostBySlug(slug);
+	const { slug, locale } = await params;
+	const post = await getPostBySlug(slug, locale);
 
 	if (!post) {
 		return {
@@ -26,8 +28,13 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-	const { slug } = await params;
-	const post = await getPostBySlug(slug);
+	const { slug, locale } = await params;
+	if (!routing.locales.includes(locale as Locale)) {
+		notFound();
+	}
+	setRequestLocale(locale);
+	const post = await getPostBySlug(slug, locale);
+	const t = await getTranslations("Blog");
 
 	if (!post) {
 		notFound();
@@ -43,7 +50,7 @@ export default async function BlogPostPage({ params }: Props) {
 					<span className="transition-transform group-hover:-translate-x-1">
 						&larr;
 					</span>{" "}
-					Back to all blogs
+					{t("backToBlogs")}
 				</Link>
 				<header className="mb-12 text-pretty">
 					<div className="mb-6 flex flex-wrap items-center gap-3">
@@ -63,7 +70,7 @@ export default async function BlogPostPage({ params }: Props) {
 					<div className="flex items-center gap-4 border-black/5 border-y py-6 text-gray-500 text-sm dark:border-white/5">
 						<div className="flex flex-col">
 							<span className="mb-0.5 font-semibold text-gray-400 text-xs uppercase tracking-tighter dark:text-gray-500">
-								Published
+								{t("published")}
 							</span>
 							<time
 								className="font-medium text-gray-900 dark:text-gray-200"
@@ -82,10 +89,10 @@ export default async function BlogPostPage({ params }: Props) {
 						<div className="hidden h-8 w-px bg-black/10 sm:block dark:bg-white/10" />
 						<div className="flex flex-col">
 							<span className="mb-0.5 font-semibold text-gray-400 text-xs uppercase tracking-tighter dark:text-gray-500">
-								Read Time
+								{t("readTime")}
 							</span>
 							<span className="font-medium text-gray-900 dark:text-gray-200">
-								{post.metadata.readingTime} min read
+								{post.metadata.readingTime} {t("minRead")}
 							</span>
 						</div>
 						<div className="ml-auto flex items-center gap-3">
