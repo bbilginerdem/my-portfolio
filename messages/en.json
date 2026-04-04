@@ -7,5 +7,47 @@
 		"published": "Published",
 		"readTime": "Read Time",
 		"minRead": "min read"
+	},
+	"Navigation": {
+		"Home": "Home",
+		"Projects": "Projects",
+		"Skills": "Skills",
+		"Contact": "Contact",
+		"Blog": "Blog"
+	},
+	"Intro": {
+		"greeting": "Hello, I'm Bilgin.",
+		"text": "I'm a <b>frontend developer</b> with <b>+5 years</b> of experience. I enjoy building <i>sites & apps</i>. My focus is <u>React</u> (Next.js) and <u>React Native</u> (Expo).",
+		"contactBtn": "Contact me here"
+	},
+	"Projects": {
+		"title": "My Projects",
+		"NexArb": {
+			"title": "NexArb",
+			"description": "I am working as a frontend developer on this open source project for about 6 months and ongoing. Objective of the project is for users to be able to do transactions on solana using their wallet with ease."
+		},
+		"ITRANSL8": {
+			"title": "ITRANSL8",
+			"description": "AI translation and dubbing tool. I have been working on frontend development for about a two months now. Finish MVP of dashboard and landing page with authentication using authjs."
+		},
+		"Final App": {
+			"title": "Final App",
+			"description": "A cross platform mobile application for high school students to just video, from variety of topics."
+		}
+	},
+	"Skills": {
+		"title": "My skills"
+	},
+	"Contact": {
+		"title": "Get in touch",
+		"description": "I'm currently looking for new opportunities. Whether you have a question or just want to say hi, I'll try my best to get back to you!",
+		"sendEmail": "Send Email",
+		"copyAddress": "Copy Address",
+		"copied": "Email copied to clipboard!",
+		"info": "Based in Ankara, Turkey • Available Worldwide"
+	},
+	"Footer": {
+		"rights": "© 2026 Behzat Bilgin Erdem. All rights reserved.",
+		"aboutStr": "<b>About this website:</b> built with React & Next.js (App Router & Server Actions), Typescript, Tailwind CSS, Framer Motion, React Email & Resend, Vercel hosting, MDX, and more."
 	}
 }

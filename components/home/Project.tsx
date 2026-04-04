@@ -2,13 +2,15 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useRef } from "react";
 
 import type { projectsData } from "@/lib/data";
 
 type ProjectProps = (typeof projectsData)[number];
 
-function Project({ title, description, tags, imageUrl }: ProjectProps) {
+function Project({ title, tags, imageUrl }: ProjectProps) {
+	const t = useTranslations("Projects");
 	const ref = useRef<HTMLDivElement>(null);
 	const { scrollYProgress } = useScroll({
 		target: ref,
@@ -28,7 +30,7 @@ function Project({ title, description, tags, imageUrl }: ProjectProps) {
 				<div className="flex h-full flex-col px-5 py-4 pb-7 sm:max-w-[50%] sm:pt-10 sm:pr-2 sm:pl-10 sm:group-even:ml-72">
 					<h3 className="font-semibold text-lg sm:text-xl">{title}</h3>
 					<p className="mt-2 text-gray-800 leading-relaxed dark:text-white/90">
-						{description}
+						{t(`${title}.description`)}
 					</p>
 					<ul className="mt-4 flex flex-wrap gap-2 sm:mt-auto">
 						{tags.map((tag) => (

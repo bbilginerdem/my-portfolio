@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useActiveSectionContext } from "@/context/ActiveSectionContextProvider";
 import { useSectionInView } from "@/lib/hooks";
 import profilePic from "@/public/images/pp.jpg";
@@ -12,6 +13,7 @@ import MyButton from "../ui/MyButton";
 function Intro() {
 	const { ref } = useSectionInView("Home", 0.5);
 	const { setActiveSection, setTimeOfLastClick } = useActiveSectionContext();
+	const t = useTranslations("Intro");
 
 	return (
 		<section
@@ -56,12 +58,15 @@ function Intro() {
 				initial={{ opacity: 0, y: 100 }}
 				animate={{ opacity: 1, y: 0 }}
 			>
-				<span className="font-bold">Hello, I&apos;m Bilgin.</span> I&apos;m a{" "}
-				<span className="font-bold">frontend developer</span> with{" "}
-				<span className="font-bold">+5 years</span> of experience. I enjoy
-				building <span className="italic">sites & apps</span>. My focus is{" "}
-				<span className="underline">React</span> (Next.js) and{" "}
-				<span className="underline">React Native</span> (Expo).
+				{t.rich("greeting", {
+					b: (chunks) => <span className="font-bold">{chunks}</span>,
+				})}{" "}
+				<br />
+				{t.rich("text", {
+					b: (chunks) => <span className="font-bold">{chunks}</span>,
+					i: (chunks) => <span className="italic">{chunks}</span>,
+					u: (chunks) => <span className="underline">{chunks}</span>,
+				})}
 			</motion.h1>
 
 			<motion.div
@@ -79,7 +84,7 @@ function Intro() {
 								setTimeOfLastClick(Date.now());
 							}}
 						>
-							Contact me here{" "}
+							{t("contactBtn")}{" "}
 							<ArrowRight
 								size={18}
 								className="opacity-70 transition group-hover:translate-x-1"

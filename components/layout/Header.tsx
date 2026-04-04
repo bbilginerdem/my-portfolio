@@ -3,6 +3,7 @@
 
 import { clsx } from "clsx";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useActiveSectionContext } from "@/context/ActiveSectionContextProvider";
 import { Link } from "@/i18n/navigation";
 import { links } from "@/lib/data";
@@ -17,6 +18,7 @@ export default function Header({
 	recentPostCount = 0,
 }: HeaderProps) {
 	const { activeSection, setActiveSection } = useActiveSectionContext();
+	const t = useTranslations("Navigation");
 
 	return (
 		<header className="relative z-999">
@@ -26,7 +28,7 @@ export default function Header({
 				animate={{ y: 0, x: "-50%", opacity: 1 }}
 			/>
 			<nav className="fixed top-[0.15rem] left-1/2 flex h-12 -translate-x-1/2 py-2 sm:top-[1.7rem] sm:h-initial sm:py-0">
-				<ul className="flex w-88 flex-wrap items-center justify-center gap-y-1 font-medium text-[0.9rem] text-gray-500 sm:w-initial sm:flex-nowrap sm:gap-5">
+				<ul className="flex w-full flex-wrap items-center justify-center gap-y-1 font-medium text-[0.9rem] text-gray-500 sm:w-initial sm:flex-nowrap sm:gap-5">
 					{links.map((link) => (
 						<li key={link.name}>
 							<Link
@@ -44,7 +46,14 @@ export default function Header({
 										"font-semibold text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300",
 								)}
 							>
-								{link.name}
+								{t(
+									link.name as
+										| "Home"
+										| "Projects"
+										| "Skills"
+										| "Contact"
+										| "Blog",
+								)}
 
 								{link.name === "Blog" && hasNewBlogContent && (
 									<span

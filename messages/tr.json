@@ -7,5 +7,47 @@
 		"published": "Yayınlanma",
 		"readTime": "Okuma Süresi",
 		"minRead": "dk okuma"
+	},
+	"Navigation": {
+		"Home": "Ana Sayfa",
+		"Projects": "Projeler",
+		"Skills": "Yetenekler",
+		"Contact": "İletişim",
+		"Blog": "Blog"
+	},
+	"Intro": {
+		"greeting": "Merhaba, ben Bilgin.",
+		"text": "<b>+5 yıllık</b> deneyime sahip bir <b>frontend geliştiricisiyim</b>. <i>Web siteleri ve uygulamalar</i> geliştirmekten keyif alıyorum. Odak noktam <u>React</u> (Next.js) ve <u>React Native</u> (Expo).",
+		"contactBtn": "Benimle iletişime geçin"
+	},
+	"Projects": {
+		"title": "Projelerim",
+		"NexArb": {
+			"title": "NexArb",
+			"description": "Yaklaşık 6 aydır bu açık kaynaklı projede frontend geliştirici olarak çalışıyorum ve devam ediyorum. Projenin amacı, kullanıcıların cüzdanlarını kullanarak solana üzerinde kolaylıkla işlem yapabilmelerini sağlamaktır."
+		},
+		"ITRANSL8": {
+			"title": "ITRANSL8",
+			"description": "Yapay zeka çeviri ve dublaj aracı. Yaklaşık iki aydır frontend geliştirme üzerine çalışıyorum. Authjs kullanarak kimlik doğrulama ile kontrol paneli ve açılış sayfasının MVP'sini tamamladım."
+		},
+		"Final App": {
+			"title": "Final App",
+			"description": "Lise öğrencileri için çeşitli konulardaki eğitim videolarını izleyebilecekleri çapraz platform mobil uygulama."
+		}
+	},
+	"Skills": {
+		"title": "Yeteneklerim"
+	},
+	"Contact": {
+		"title": "İletişime Geçin",
+		"description": "Şu anda yeni fırsatlar arıyorum. Bir sorunuz varsa veya sadece merhaba demek isterseniz, size geri dönmek için elimden geleni yapacağım!",
+		"sendEmail": "E-posta Gönder",
+		"copyAddress": "Adresi Kopyala",
+		"copied": "E-posta panoya kopyalandı!",
+		"info": "Ankara, Türkiye Merkezli • Dünya Çapında Erişilebilir"
+	},
+	"Footer": {
+		"rights": "© 2026 Behzat Bilgin Erdem. Tüm hakları saklıdır.",
+		"aboutStr": "<b>Bu web sitesi hakkında:</b> React & Next.js (App Router & Server Actions), Typescript, Tailwind CSS, Framer Motion, React Email & Resend, Vercel hosting, MDX ve daha fazlasıyla oluşturuldu."
 	}
 }
