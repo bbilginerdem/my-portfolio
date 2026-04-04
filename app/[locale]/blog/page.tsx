@@ -37,8 +37,8 @@ export default async function BlogPage(props: Props) {
 	const allTags = Array.from(new Set(allPosts.flatMap((p) => p.tags)));
 
 	return (
-		<main className="flex flex-col items-center px-4 py-20 pb-40">
-			<section className="w-full max-w-5xl scroll-mt-28">
+		<main className="relative flex flex-col items-center px-4 py-20 pb-40">
+			<section className="relative w-full max-w-5xl scroll-mt-28">
 				<div className="text-center">
 					<SectionHeader mb="mb8">{t("title")}</SectionHeader>
 					<p className="mt-4 text-gray-600 dark:text-gray-400">

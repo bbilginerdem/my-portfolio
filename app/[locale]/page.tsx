@@ -6,7 +6,7 @@ import SectionDivider from "@/components/ui/SectionDivider";
 
 export default function Home() {
 	return (
-		<main className="flex flex-col items-center px-4">
+		<main className="relative flex flex-col items-center px-4">
 			<Intro />
 			<SectionDivider />
 			<Projects />

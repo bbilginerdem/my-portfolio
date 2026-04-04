@@ -43,7 +43,11 @@ export default async function RootLayout({
 	const messages = await getMessages();
 
 	return (
-		<html lang={locale} className="scroll-smooth!">
+		<html
+			lang={locale}
+			className="scroll-smooth!"
+			data-scroll-behavior="smooth"
+		>
 			<body
 				className={`${dmSans.className} relative bg-gray-50 pt-28 text-gray-950 sm:pt-36 dark:bg-gray-900 dark:text-gray-50/90`}
 			>
