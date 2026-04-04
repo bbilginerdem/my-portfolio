@@ -53,6 +53,7 @@ pnpm build
 - [ ] **Deep Dive**: Mastery of Tailwind v4's new engine and React 19's `use` hook.
 
 ### 💻 Technical Enhancements
+- [ ] **UX**: On /blog/* pages, remove translate button, as blogs don't support multiple languages.
 - [ ] **MDX Support**: Convert standard blog posts to MDX for interactive components within articles.
 - [ ] **Search Functionality**: Implement a global search for blog posts using Fuse.js or Algolia.
 - [ ] **Page Transitions**: Add seamless transitions between the Home and Blog pages.
