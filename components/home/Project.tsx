@@ -24,7 +24,7 @@ function Project({ title, tags, imageUrl }: ProjectProps) {
 		<motion.div
 			ref={ref}
 			style={{ scale: scaleProgress, opacity: opacityProgress }}
-			className="group mb-3 last:mb-0 sm:mb-8"
+			className="group relative mb-3 last:mb-0 sm:mb-8"
 		>
 			<section className="relative max-w-2xl overflow-hidden rounded-lg border border-black/5 bg-gray-100 transition hover:bg-gray-200 sm:h-80 sm:pr-8 sm:group-even:pl-8 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
 				<div className="flex h-full flex-col px-5 py-4 pb-7 sm:max-w-[50%] sm:pt-10 sm:pr-2 sm:pl-10 sm:group-even:ml-72">
