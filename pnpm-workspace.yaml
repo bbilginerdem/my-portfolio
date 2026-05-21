@@ -2,6 +2,9 @@ allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true
   sharp: true
+minimumReleaseAgeExclude:
+  - framer-motion@12.40.0
+  - motion-dom@12.40.0
 overrides:
   postcss@<8.5.10: '>=8.5.10'
   yaml@>=2.0.0 <2.8.3: '>=2.8.3'
