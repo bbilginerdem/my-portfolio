@@ -1,14 +1,19 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { motion } from "motion/react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
 import { useActiveSectionContext } from "@/context/ActiveSectionContextProvider";
 import { useSectionInView } from "@/lib/hooks";
 import profilePic from "@/public/images/pp.jpg";
 import { GitHubIcon, LinkedInIcon } from "../ui/Icons";
 import MyButton from "../ui/MyButton";
+
+const formatBold = (chunks: ReactNode) => <span className="font-bold">{chunks}</span>;
+const formatItalic = (chunks: ReactNode) => <span className="italic">{chunks}</span>;
+const formatUnderline = (chunks: ReactNode) => <span className="underline">{chunks}</span>;
 
 function Intro() {
 	const { ref } = useSectionInView("Home", 0.5);
@@ -16,11 +21,7 @@ function Intro() {
 	const t = useTranslations("Intro");
 
 	return (
-		<section
-			ref={ref}
-			className="mb-28 max-w-200 scroll-mt-400 text-center sm:mb-0"
-			id="home"
-		>
+		<section ref={ref} className="mb-28 max-w-200 scroll-mt-400 text-center sm:mb-0" id="home">
 			<div className="flex items-center justify-center">
 				<motion.div
 					initial={{ opacity: 0, scale: 0 }}
@@ -59,13 +60,13 @@ function Intro() {
 				animate={{ opacity: 1, y: 0 }}
 			>
 				{t.rich("greeting", {
-					b: (chunks) => <span className="font-bold">{chunks}</span>,
+					b: formatBold,
 				})}{" "}
 				<br />
 				{t.rich("text", {
-					b: (chunks) => <span className="font-bold">{chunks}</span>,
-					i: (chunks) => <span className="italic">{chunks}</span>,
-					u: (chunks) => <span className="underline">{chunks}</span>,
+					b: formatBold,
+					i: formatItalic,
+					u: formatUnderline,
 				})}
 			</motion.h1>
 
@@ -85,10 +86,7 @@ function Intro() {
 							}}
 						>
 							{t("contactBtn")}{" "}
-							<ArrowRight
-								size={18}
-								className="opacity-70 transition group-hover:translate-x-1"
-							/>
+							<ArrowRight size={18} className="opacity-70 transition group-hover:translate-x-1" />
 						</MyButton>
 					</a>
 				</div>

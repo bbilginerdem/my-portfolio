@@ -10,7 +10,6 @@ type ShareButtonProps = {
 	messages?: {
 		successShared?: string;
 		successCopied?: string;
-		errorFailed?: string;
 		errorFallback?: string;
 	};
 };
@@ -19,81 +18,77 @@ const isAbortError = (error: unknown): error is DOMException => {
 	return error instanceof DOMException && error.name === "AbortError";
 };
 
-const isSecureContext = (): boolean => {
-	return window.isSecureContext || location.protocol === "https:";
-};
-
-const fallbackCopyToClipboard = (text: string): boolean => {
-	try {
-		const textarea = document.createElement("textarea");
-		textarea.value = text;
-		textarea.style.position = "fixed";
-		textarea.style.left = "-9999px";
-		textarea.style.top = "0";
-		textarea.setAttribute("aria-hidden", "true");
-		document.body.appendChild(textarea);
-		textarea.focus();
-		textarea.select();
-
-		const success = document.execCommand("copy");
-		document.body.removeChild(textarea);
-		return success;
-	} catch {
-		return false;
-	}
-};
-
 const showManualCopyDialog = (url: string, onDismiss: () => void) => {
 	const dialog = document.createElement("div");
 	dialog.setAttribute("role", "dialog");
 	dialog.setAttribute("aria-modal", "true");
 	dialog.setAttribute("aria-labelledby", "share-dialog-title");
-	dialog.className =
-		"fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4";
+	dialog.className = "fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4";
 	dialog.innerHTML = `
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6">
       <h2 id="share-dialog-title" class="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
         Copy Link Manually
       </h2>
       <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
-        Your browser doesn't support automatic sharing. Please copy the link below:
+        Your browser does not support automatic sharing or copying. Please select and copy the link below:
       </p>
       <div class="relative mb-4">
-        <code class="block w-full p-3 bg-gray-100 dark:bg-gray-700 rounded text-sm break-all pr-10 text-gray-800 dark:text-gray-200">
+        <code id="share-url-text" class="block w-full p-3 bg-gray-100 dark:bg-gray-700 rounded text-sm break-all pr-16 text-gray-800 dark:text-gray-200">
           ${url}
         </code>
         <button
-          onclick="navigator.clipboard.writeText('${url.replace(/'/g, "\\'")}')"
-          class="absolute right-2 top-2 p-1 text-blue-600 hover:text-blue-800 dark:text-blue-400"
+          id="manual-copy-btn"
+          class="absolute right-2 top-2 py-1 px-2 text-xs font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400"
           aria-label="Copy to clipboard"
         >
-          📋
+          Copy
         </button>
       </div>
-      <button
+      <button id="close-dialog-btn"
         class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium transition"
       >
-        Got it
+        Understood
       </button>
     </div>
   `;
 
-	const closeButton = dialog.querySelector("button:last-child");
+	const closeButton = dialog.querySelector("#close-dialog-btn");
+	const copyButton = dialog.querySelector("#manual-copy-btn");
+	const urlText = dialog.querySelector("#share-url-text");
+
+	copyButton?.addEventListener("click", async () => {
+		try {
+			if (navigator.clipboard) {
+				await navigator.clipboard.writeText(url);
+				toast.success("Link copied to clipboard.");
+			} else if (urlText) {
+				const range = document.createRange();
+				range.selectNode(urlText);
+				window.getSelection()?.removeAllRanges();
+				window.getSelection()?.addRange(range);
+			}
+		} catch (error) {
+			if (process.env.NODE_ENV === "development") {
+				console.warn("Manual copy interaction failed:", error);
+			}
+		}
+	});
+
 	closeButton?.addEventListener("click", () => {
-		document.body.removeChild(dialog);
+		dialog.remove();
 		onDismiss();
 	});
 
 	dialog.addEventListener("click", (e) => {
 		if (e.target === dialog) {
-			document.body.removeChild(dialog);
+			dialog.remove();
 			onDismiss();
 		}
 	});
 
 	const handleEscape = (e: KeyboardEvent) => {
 		if (e.key === "Escape") {
-			document.body.removeChild(dialog);
+			dialog.remove();
 			document.removeEventListener("keydown", handleEscape);
 			onDismiss();
 		}
@@ -109,14 +104,13 @@ export default function ShareButton({
 	onShareSuccess,
 	onShareError,
 	messages,
-}: ShareButtonProps) {
+}: Readonly<ShareButtonProps>) {
 	const [isSharing, setIsSharing] = useState(false);
 
 	const defaultMessages = {
-		successShared: "Shared successfully!",
-		successCopied: "Link copied to clipboard!",
-		errorFailed: "Failed to copy link",
-		errorFallback: "Please copy the link manually",
+		successShared: "Shared successfully.",
+		successCopied: "Link copied to clipboard.",
+		errorFallback: "Please copy the link manually.",
 	};
 
 	const msg = { ...defaultMessages, ...messages };
@@ -136,27 +130,16 @@ export default function ShareButton({
 				return;
 			}
 		} catch (error) {
-			// User canceled share dialog - no fallback needed
 			if (isAbortError(error)) {
 				setIsSharing(false);
 				return;
 			}
-			console.error("Share API error:", {
-				name: (error as Error).name,
-				message: (error as Error).message,
-			});
 			onShareError?.(error as Error);
 		}
 
 		try {
-			if (navigator.clipboard && isSecureContext()) {
+			if (navigator.clipboard && window.isSecureContext) {
 				await navigator.clipboard.writeText(url);
-				toast.success(msg.successCopied);
-				onShareSuccess?.();
-				return;
-			}
-
-			if (fallbackCopyToClipboard(url)) {
 				toast.success(msg.successCopied);
 				onShareSuccess?.();
 				return;
@@ -167,9 +150,14 @@ export default function ShareButton({
 			});
 			toast.info(msg.errorFallback, { duration: 5000 });
 		} catch (error) {
-			console.error("Clipboard fallback error:", error);
-			toast.error(msg.errorFailed);
-			onShareError?.(error as Error);
+			if (process.env.NODE_ENV === "development") {
+				console.warn("Clipboard API failed, executing manual fallback:", error);
+			}
+
+			showManualCopyDialog(url, () => {
+				onShareError?.(new Error("User prompted to copy manually"));
+			});
+			toast.info(msg.errorFallback, { duration: 5000 });
 		} finally {
 			setIsSharing(false);
 		}
@@ -180,7 +168,6 @@ export default function ShareButton({
 		onShareError,
 		msg.successShared,
 		msg.successCopied,
-		msg.errorFailed,
 		msg.errorFallback,
 	]);
 

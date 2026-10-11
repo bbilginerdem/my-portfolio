@@ -1,10 +1,4 @@
-export const GitHubIcon = ({
-	className,
-	size = 24,
-}: {
-	className?: string;
-	size?: number;
-}) => (
+export const GitHubIcon = ({ className, size = 24 }: { className?: string; size?: number }) => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width={size}
@@ -23,13 +17,7 @@ export const GitHubIcon = ({
 	</svg>
 );
 
-export const LinkedInIcon = ({
-	className,
-	size = 24,
-}: {
-	className?: string;
-	size?: number;
-}) => (
+export const LinkedInIcon = ({ className, size = 24 }: { className?: string; size?: number }) => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"
 		width={size}

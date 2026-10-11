@@ -1,9 +1,10 @@
 import clsx from "clsx";
 import { notFound } from "next/navigation";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { hasLocale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { Link } from "@/i18n/navigation";
-import { type Locale, routing } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 import { getAllPosts } from "@/lib/blog";
 
 type Props = {
@@ -20,17 +21,17 @@ export async function generateMetadata(props: Props) {
 	};
 }
 
-export default async function BlogPage(props: Props) {
+export default async function BlogPage(props: Readonly<Props>) {
 	const { locale } = await props.params;
-	if (!routing.locales.includes(locale as Locale)) {
+
+	if (!hasLocale(routing.locales, locale)) {
 		notFound();
 	}
-	setRequestLocale(locale);
+
 	const t = await getTranslations("Blog");
 
 	const searchParams = await props.searchParams;
-	const tag =
-		typeof searchParams?.tag === "string" ? searchParams.tag : undefined;
+	const tag = typeof searchParams?.tag === "string" ? searchParams.tag : undefined;
 
 	const allPosts = await getAllPosts(locale);
 	const posts = tag ? allPosts.filter((p) => p.tags.includes(tag)) : allPosts;
@@ -41,9 +42,7 @@ export default async function BlogPage(props: Props) {
 			<section className="relative w-full max-w-5xl scroll-mt-28">
 				<div className="text-center">
 					<SectionHeader mb="mb8">{t("title")}</SectionHeader>
-					<p className="mt-4 text-gray-600 dark:text-gray-400">
-						{t("description")}
-					</p>
+					<p className="mt-4 text-gray-600 dark:text-gray-400">{t("description")}</p>
 				</div>
 
 				<div className="mt-10 flex flex-wrap justify-center gap-2">
@@ -58,18 +57,18 @@ export default async function BlogPage(props: Props) {
 					>
 						{t("all")}
 					</Link>
-					{allTags.map((t) => (
+					{allTags.map((tagItem) => (
 						<Link
-							key={t}
-							href={`/blog?tag=${t}`}
+							key={tagItem}
+							href={`/blog?tag=${tagItem}`}
 							className={clsx(
 								"rounded-full px-4 py-2 font-semibold text-sm transition-colors",
-								tag === t
+								tag === tagItem
 									? "bg-blue-600 text-white dark:bg-blue-500"
 									: "bg-black/5 text-gray-600 hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10",
 							)}
 						>
-							{t}
+							{tagItem}
 						</Link>
 					))}
 				</div>
@@ -102,12 +101,12 @@ export default async function BlogPage(props: Props) {
 									{post.excerpt}
 								</p>
 								<div className="mt-auto flex flex-wrap gap-2 pt-6">
-									{post.tags.slice(0, 3).map((tag) => (
+									{post.tags.slice(0, 3).map((postTag) => (
 										<span
-											key={tag}
+											key={postTag}
 											className="rounded-full bg-black/5 px-2.5 py-1 font-medium text-[0.65rem] text-gray-600 uppercase tracking-wider dark:bg-white/5 dark:text-gray-400"
 										>
-											{tag}
+											{postTag}
 										</span>
 									))}
 								</div>

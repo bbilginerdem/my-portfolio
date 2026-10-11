@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Check, Copy, Mail } from "lucide-react";
+import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -15,18 +15,14 @@ export default function Contact() {
 	const email = "bbilgin.erdem@gmail.com";
 
 	const copyToClipboard = () => {
-		globalThis.navigator.clipboard.writeText(email);
+		void globalThis.navigator.clipboard.writeText(email);
 		setCopied(true);
 		toast.success(t("copied"));
 		setTimeout(() => setCopied(false), 2000);
 	};
 
 	return (
-		<section
-			id="contact"
-			ref={ref}
-			className="mb-20 w-full max-w-152 text-center sm:mb-28"
-		>
+		<section id="contact" ref={ref} className="mb-20 w-full max-w-152 text-center sm:mb-28">
 			<SectionHeading mb="mb8">{t("title")}</SectionHeading>
 
 			<motion.div
@@ -42,7 +38,6 @@ export default function Contact() {
 					</p>
 
 					<div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-						{/* Primary Action */}
 						<a
 							href={`mailto:${email}`}
 							className="group flex items-center justify-center gap-2 rounded-2xl bg-gray-900 px-7 py-4 text-white transition hover:bg-gray-800 active:scale-95 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
@@ -50,13 +45,9 @@ export default function Contact() {
 							<span className="font-semibold text-sm uppercase tracking-wide">
 								{t("sendEmail")}
 							</span>
-							<Mail
-								size={18}
-								className="opacity-70 transition group-hover:translate-x-1"
-							/>
+							<Mail size={18} className="opacity-70 transition group-hover:translate-x-1" />
 						</a>
 
-						{/* Copy Email */}
 						<button
 							onClick={copyToClipboard}
 							type="button"
@@ -74,7 +65,6 @@ export default function Contact() {
 					</div>
 				</div>
 
-				{/* Botton Info Bar */}
 				<div className="bg-gray-50/50 px-8 py-4 dark:bg-white/5">
 					<p className="text-[10px] text-gray-500 uppercase tracking-widest dark:text-white/30">
 						{t("info")}

@@ -47,9 +47,7 @@ export default async function BlogPostPage({ params }: Props) {
 					href="/blog"
 					className="group mb-12 flex items-center gap-2 text-gray-500 text-sm transition-colors hover:text-gray-900 dark:hover:text-white"
 				>
-					<span className="transition-transform group-hover:-translate-x-1">
-						&larr;
-					</span>{" "}
+					<span className="transition-transform group-hover:-translate-x-1">&larr;</span>{" "}
 					{t("backToBlogs")}
 				</Link>
 				<header className="mb-12 text-pretty">
@@ -76,14 +74,11 @@ export default async function BlogPostPage({ params }: Props) {
 								className="font-medium text-gray-900 dark:text-gray-200"
 								dateTime={post.metadata.publishDate}
 							>
-								{new Date(post.metadata.publishDate).toLocaleDateString(
-									"en-US",
-									{
-										year: "numeric",
-										month: "long",
-										day: "numeric",
-									},
-								)}
+								{new Date(post.metadata.publishDate).toLocaleDateString("en-US", {
+									year: "numeric",
+									month: "long",
+									day: "numeric",
+								})}
 							</time>
 						</div>
 						<div className="hidden h-8 w-px bg-black/10 sm:block dark:bg-white/10" />

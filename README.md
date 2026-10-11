@@ -48,6 +48,7 @@ pnpm build
 ## 🎯 Future Roadmap (TODOs)
 
 ### 📚 Content & Learning
+- [ ] **Translate all blogs from english to turkish**: Using LLMs.
 - [ ] **Launch Udemy Courses**: Develop and publish structured courses on Frontend Development.
 - [ ] **Regular Blogging**: Industry insights, React/Next.js tutorials, and career advice.
 - [ ] **Deep Dive**: Mastery of Tailwind v4's new engine and React 19's `use` hook.

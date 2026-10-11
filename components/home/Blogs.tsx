@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Link } from "@/i18n/navigation";
 import { useSectionInView } from "@/lib/hooks";
 import type { BlogMetadata } from "@/lib/types";
@@ -14,11 +14,7 @@ export default function Blogs({ posts }: Readonly<BlogsProps>) {
 	const { ref } = useSectionInView("Blog", 0.5);
 
 	return (
-		<section
-			ref={ref}
-			id="blog"
-			className="mb-28 max-w-5xl scroll-mt-28 text-center sm:mb-40"
-		>
+		<section ref={ref} id="blog" className="mb-28 max-w-5xl scroll-mt-28 text-center sm:mb-40">
 			<SectionHeader mb="mb8">Latest Blogs</SectionHeader>
 			<div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
 				{posts.map((post, index) => (

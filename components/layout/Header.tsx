@@ -1,9 +1,8 @@
-// components/Navbar.tsx
 "use client";
 
 import { clsx } from "clsx";
-import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useActiveSectionContext } from "@/context/ActiveSectionContextProvider";
@@ -18,10 +17,17 @@ type HeaderProps = {
 export default function Header({
 	hasNewBlogContent = false,
 	recentPostCount = 0,
-}: HeaderProps) {
+}: Readonly<HeaderProps>) {
 	const { activeSection, setActiveSection } = useActiveSectionContext();
 	const t = useTranslations("Navigation");
 	const [isOpen, setIsOpen] = useState(false);
+
+	const checkRecentPost = recentPostCount > 1 ? "s" : "";
+
+	const newContentLabel =
+		recentPostCount > 0
+			? `${recentPostCount} new blog post${checkRecentPost} available`
+			: "New content available";
 
 	return (
 		<header className="relative z-999">
@@ -31,7 +37,6 @@ export default function Header({
 				animate={{ y: 0, x: "-50%", opacity: 1 }}
 			/>
 
-			{/* Mobile Icon */}
 			<motion.div
 				className="fixed top-4 right-4 z-50 flex items-center justify-end sm:hidden"
 				initial={{ y: -100, opacity: 0 }}
@@ -59,35 +64,22 @@ export default function Header({
 								className={clsx(
 									"flex items-center justify-center rounded-full px-3 py-2 text-sm transition hover:text-gray-950 dark:text-gray-300 dark:hover:text-gray-200",
 									{
-										"text-gray-950 dark:text-gray-100":
-											activeSection === link.name,
+										"text-gray-950 dark:text-gray-100": activeSection === link.name,
 									},
 									link.name === "Blog" &&
 										"font-semibold text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300",
 								)}
 							>
-								{t(
-									link.name as
-										| "Home"
-										| "Projects"
-										| "Skills"
-										| "Contact"
-										| "Blog",
-								)}
+								{t(link.name as "Home" | "Projects" | "Skills" | "Contact" | "Blog")}
 
 								{link.name === "Blog" && hasNewBlogContent && (
-									<span
+									<output
 										className="ml-1.5 flex h-2 w-2 items-center justify-center"
-										role="status"
-										aria-label={
-											recentPostCount > 0
-												? `${recentPostCount} new blog post${recentPostCount > 1 ? "s" : ""} available`
-												: "New content available"
-										}
+										aria-label={newContentLabel}
 									>
 										<span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-purple-500 opacity-75" />
 										<span className="relative inline-flex h-2 w-2 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]" />
-									</span>
+									</output>
 								)}
 							</Link>
 						</li>
@@ -95,7 +87,6 @@ export default function Header({
 				</ul>
 			</nav>
 
-			{/* Mobile Dropdown Menu */}
 			<AnimatePresence>
 				{isOpen && (
 					<motion.div
@@ -116,30 +107,22 @@ export default function Header({
 										className={clsx(
 											"flex w-full items-center justify-center px-4 py-2 transition hover:text-gray-950 dark:text-gray-300 dark:hover:text-gray-200",
 											{
-												"font-bold text-gray-950 dark:text-gray-100":
-													activeSection === link.name,
+												"font-bold text-gray-950 dark:text-gray-100": activeSection === link.name,
 											},
 											link.name === "Blog" &&
 												"font-bold text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300",
 										)}
 									>
-										{t(
-											link.name as
-												| "Home"
-												| "Projects"
-												| "Skills"
-												| "Contact"
-												| "Blog",
-										)}
+										{t(link.name as "Home" | "Projects" | "Skills" | "Contact" | "Blog")}
 
 										{link.name === "Blog" && hasNewBlogContent && (
-											<span
+											<output
 												className="ml-2 flex h-2 w-2 items-center justify-center"
-												role="status"
+												aria-label={newContentLabel}
 											>
 												<span className="absolute inline-flex h-2 w-2 animate-ping rounded-full bg-purple-500 opacity-75" />
 												<span className="relative inline-flex h-2 w-2 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.6)]" />
-											</span>
+											</output>
 										)}
 									</Link>
 								</li>

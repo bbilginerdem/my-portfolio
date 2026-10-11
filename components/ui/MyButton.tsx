@@ -5,11 +5,7 @@ interface MyButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	className?: string;
 }
 
-const MyButton: React.FC<MyButtonProps> = ({
-	className,
-	children,
-	...props
-}) => {
+const MyButton: React.FC<MyButtonProps> = ({ className, children, ...props }) => {
 	return (
 		<button
 			className={cn(

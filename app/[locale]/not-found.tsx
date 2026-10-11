@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Link } from "@/i18n/navigation";
 
 export default function NotFound() {
@@ -12,9 +12,7 @@ export default function NotFound() {
 				transition={{ duration: 0.5 }}
 				className="text-center"
 			>
-				<h1 className="font-bold text-9xl text-gray-200 dark:text-gray-800">
-					404
-				</h1>
+				<h1 className="font-bold text-9xl text-gray-200 dark:text-gray-800">404</h1>
 				<div className="-mt-8">
 					<h2 className="font-bold text-3xl">Page Not Found</h2>
 					<p className="mt-4 text-gray-600 dark:text-gray-400">

@@ -16,8 +16,7 @@ type ActiveSectionContextType = {
 	setTimeOfLastClick: React.Dispatch<React.SetStateAction<number>>;
 };
 
-export const ActiveSectionContext =
-	createContext<ActiveSectionContextType | null>(null);
+export const ActiveSectionContext = createContext<ActiveSectionContextType | null>(null);
 
 export default function ActiveSectionContextProvider({
 	children,
@@ -35,20 +34,14 @@ export default function ActiveSectionContextProvider({
 		[activeSection, timeOfLastClick],
 	);
 
-	return (
-		<ActiveSectionContext.Provider value={value}>
-			{children}
-		</ActiveSectionContext.Provider>
-	);
+	return <ActiveSectionContext.Provider value={value}>{children}</ActiveSectionContext.Provider>;
 }
 
 export function useActiveSectionContext() {
 	const context = useContext(ActiveSectionContext);
 
 	if (!context) {
-		throw new Error(
-			"useActiveSectionContext must be used within a ActiveSectionContextProvider",
-		);
+		throw new Error("useActiveSectionContext must be used within a ActiveSectionContextProvider");
 	}
 
 	return context;

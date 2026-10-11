@@ -3,7 +3,7 @@
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useNavigationProgress } from "@/lib/hooks";
 
-const MIN_PROGRESS_WIDTH = 5; // Start small for a snappier feel
+const MIN_PROGRESS_WIDTH = 5;
 const COMPLETE_WIDTH = 100;
 
 function ProgressBarInner() {
@@ -21,7 +21,6 @@ function ProgressBarInner() {
 		setProgress(COMPLETE_WIDTH);
 		setIsComplete(true);
 
-		// Smoothly fade out and reset
 		setTimeout(() => {
 			setIsVisible(false);
 			setTimeout(() => {
@@ -36,7 +35,6 @@ function ProgressBarInner() {
 	useEffect(() => {
 		if (progress > 0 && progress < COMPLETE_WIDTH && !isComplete) {
 			const timeout = setTimeout(() => {
-				// Logarithmic easing: faster at start, slower as it nears the end
 				setProgress((prev) => prev + (100 - prev) * 0.02);
 			}, 100);
 			return () => clearTimeout(timeout);
@@ -46,8 +44,7 @@ function ProgressBarInner() {
 	if (!isVisible) return null;
 
 	return (
-		<div
-			role="progressbar"
+		<progress
 			aria-valuenow={progress}
 			aria-valuemin={0}
 			aria-valuemax={100}
@@ -57,7 +54,6 @@ function ProgressBarInner() {
 				transition: "opacity 300ms ease-in-out",
 			}}
 		>
-			{/* The Bar */}
 			<div
 				className={
 					"h-full bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_10px_rgba(99,102,241,0.5)] transition-all duration-500 ease-out dark:from-indigo-400 dark:via-fuchsia-400 dark:to-rose-400"
@@ -67,17 +63,15 @@ function ProgressBarInner() {
 				}}
 			/>
 
-			{/* Trailing Glow Effect */}
 			<div
-				className="absolute top-0 h-full w-[150px] opacity-100"
+				className="absolute top-0 h-full w-37.5 opacity-100"
 				style={{
 					left: `${progress}%`,
 					transform: "translateX(-100%)",
-					background:
-						"linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)",
+					background: "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)",
 				}}
 			/>
-		</div>
+		</progress>
 	);
 }
 

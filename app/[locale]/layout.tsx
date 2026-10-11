@@ -1,21 +1,21 @@
 import Header from "@/components/layout/Header";
 import NextProgressBar from "@/components/ui/NextProgressBar";
 
-import "@/app/globals.css"; // Fixed import since it's moved
+import "@/app/globals.css";
 
 import { Analytics } from "@vercel/analytics/next";
 import { DM_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next/types";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 import { Toaster } from "sonner";
 import Footer from "@/components/layout/Footer";
 import LanguageSwitch from "@/components/layout/LanguageSwitch";
 import ThemeSwitch from "@/components/layout/ThemeSwitch";
 import ActiveSectionContextProvider from "@/context/ActiveSectionContextProvider";
 import ThemeContextProvider from "@/context/ThemeContext";
-import { type Locale, routing } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 import { getRecentPostsInfo } from "@/lib/content";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
@@ -26,6 +26,10 @@ export const metadata: Metadata = {
 		"Behzat Bilgin is a frontend developer based in Ankara, Turkey with +5 years of experience.",
 };
 
+export function generateStaticParams() {
+	return routing.locales.map((locale) => ({ locale }));
+}
+
 export default async function RootLayout({
 	children,
 	params,
@@ -34,20 +38,16 @@ export default async function RootLayout({
 	params: Promise<{ locale: string }>;
 }>) {
 	const { locale } = await params;
-	if (!routing.locales.includes(locale as Locale)) {
+
+	if (!hasLocale(routing.locales, locale)) {
 		notFound();
 	}
-	setRequestLocale(locale);
 
 	const { hasRecent, count } = await getRecentPostsInfo();
 	const messages = await getMessages();
 
 	return (
-		<html
-			lang={locale}
-			className="scroll-smooth!"
-			data-scroll-behavior="smooth"
-		>
+		<html lang={locale} className="scroll-smooth!" data-scroll-behavior="smooth">
 			<body
 				className={`${dmSans.className} relative bg-gray-50 pt-28 text-gray-950 sm:pt-36 dark:bg-gray-900 dark:text-gray-50/90`}
 			>

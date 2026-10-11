@@ -11,10 +11,7 @@ interface MbVariable {
 	mb4: string;
 }
 
-export default function SectionHeading({
-	mb,
-	children,
-}: Readonly<SectionHeadingProps>) {
+export default function SectionHeading({ mb, children }: Readonly<SectionHeadingProps>) {
 	const mbVariants: MbVariable = {
 		mb8: "mb-8",
 		mb6: "mb-6",
@@ -22,9 +19,7 @@ export default function SectionHeading({
 	};
 
 	return (
-		<h2
-			className={`${mbVariants[mb]} text-center font-medium text-2xl capitalize sm:text-3xl`}
-		>
+		<h2 className={`${mbVariants[mb]} text-center font-medium text-2xl capitalize sm:text-3xl`}>
 			{children}
 		</h2>
 	);

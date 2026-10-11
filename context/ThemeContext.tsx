@@ -1,14 +1,7 @@
 "use client";
 
 import type React from "react";
-import {
-	createContext,
-	useCallback,
-	useContext,
-	useEffect,
-	useMemo,
-	useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 type Theme = "light" | "dark";
 
@@ -23,9 +16,7 @@ type ThemeContextType = {
 
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
-export default function ThemeContextProvider({
-	children,
-}: Readonly<ThemeContextProviderProps>) {
+export default function ThemeContextProvider({ children }: Readonly<ThemeContextProviderProps>) {
 	const [theme, setTheme] = useState<Theme>("dark");
 
 	useEffect(() => {
@@ -82,7 +73,6 @@ export default function ThemeContextProvider({
 		});
 	}, []);
 
-	// The object passed as the value prop to the Context provider changes every render to prevent this added useMemo
 	const value = useMemo(
 		() => ({
 			theme,
@@ -91,9 +81,7 @@ export default function ThemeContextProvider({
 		[theme, toggleTheme],
 	);
 
-	return (
-		<ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-	);
+	return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme() {

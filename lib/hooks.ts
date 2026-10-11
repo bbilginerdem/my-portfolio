@@ -6,7 +6,7 @@ import { useActiveSectionContext } from "@/context/ActiveSectionContextProvider"
 import type { SectionName } from "./types";
 
 export function useSectionInView(sectionName: SectionName, threshold = 0.75) {
-	const { ref, inView } = useInView({ threshold: threshold });
+	const { ref, inView } = useInView({ threshold });
 	const { setActiveSection, timeOfLastClick } = useActiveSectionContext();
 
 	useEffect(() => {
@@ -18,14 +18,14 @@ export function useSectionInView(sectionName: SectionName, threshold = 0.75) {
 	return { ref };
 }
 
-export function useNavigationProgress(
-	onStart: () => void,
-	onComplete: () => void,
-) {
+export function useNavigationProgress(onStart: () => void, onComplete: () => void) {
 	const pathname = usePathname();
 	const searchParams = useSearchParams();
 	const onStartRef = useRef(onStart);
 	const onCompleteRef = useRef(onComplete);
+
+	// Consolidate route identifiers into a single key to detect navigation changes
+	const routeKey = `${pathname}?${searchParams.toString()}`;
 
 	useEffect(() => {
 		onStartRef.current = onStart;
@@ -33,12 +33,10 @@ export function useNavigationProgress(
 	}, [onStart, onComplete]);
 
 	useEffect(() => {
-		onCompleteRef.current();
-
-		if (process.env.NODE_ENV === "development") {
-			console.log("[Navigation Complete]", pathname, searchParams?.toString());
+		if (routeKey !== undefined) {
+			onCompleteRef.current();
 		}
-	}, [pathname, searchParams]);
+	}, [routeKey]);
 
 	useEffect(() => {
 		const handleClick = (e: MouseEvent) => {
@@ -56,7 +54,6 @@ export function useNavigationProgress(
 
 			const isDownload = anchor.hasAttribute("download");
 
-			// Hash links shouldn't trigger loading unless it's a different page
 			const isHashOnlyChange =
 				currentUrl.pathname === targetUrl.pathname &&
 				currentUrl.search === targetUrl.search &&
@@ -70,19 +67,16 @@ export function useNavigationProgress(
 				!isDownload &&
 				!isHashOnlyChange &&
 				!isSameUrl &&
-				// Prevent triggering if cmd/ctrl/shift/alt is pressed (opening in new tab)
 				!e.ctrlKey &&
 				!e.metaKey &&
 				!e.shiftKey &&
 				!e.altKey &&
-				// Do not trigger if the event's default is already prevented
 				!e.defaultPrevented
 			) {
 				onStartRef.current();
 			}
 		};
 
-		// Use capture phase to ensure we catch clicks before they might be prevented
 		document.addEventListener("click", handleClick, true);
 		return () => document.removeEventListener("click", handleClick, true);
 	}, []);

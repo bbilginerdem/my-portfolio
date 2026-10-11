@@ -1,4 +1,7 @@
 import { useTranslations } from "next-intl";
+import type { ReactNode } from "react";
+
+const formatSemibold = (chunks: ReactNode) => <span className="font-semibold">{chunks}</span>;
 
 function Footer() {
 	const t = useTranslations("Footer");
@@ -7,7 +10,7 @@ function Footer() {
 			<small className="mb-2 block text-xs">{t("rights")}</small>
 			<p className="text-xs">
 				{t.rich("aboutStr", {
-					b: (chunks) => <span className="font-semibold">{chunks}</span>,
+					b: formatSemibold,
 				})}
 			</p>
 		</footer>

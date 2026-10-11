@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
 		qualities: [75, 95],
 	},
 
-	async headers() {
+	headers() {
 		return [
 			{
 				source: "/:path*",
