@@ -28,14 +28,14 @@ function Project({ title, tags, imageUrl }: ProjectProps) {
 		>
 			<section className="relative max-w-2xl overflow-hidden rounded-lg border border-black/5 bg-gray-100 transition hover:bg-gray-200 sm:h-80 sm:pr-8 sm:group-even:pl-8 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
 				<div className="flex h-full flex-col px-5 py-4 pb-7 sm:max-w-[50%] sm:pt-10 sm:pr-2 sm:pl-10 sm:group-even:ml-72">
-					<h3 className="font-semibold text-lg sm:text-xl">{title}</h3>
-					<p className="mt-2 text-gray-800 leading-relaxed dark:text-white/90">
+					<h3 className="text-lg font-semibold sm:text-xl">{title}</h3>
+					<p className="mt-2 leading-relaxed text-gray-800 dark:text-white/90">
 						{t(`${title}.description`)}
 					</p>
 					<ul className="mt-4 flex flex-wrap gap-2 sm:mt-auto">
 						{tags.map((tag) => (
 							<li
-								className="rounded-full bg-black/80 px-3 py-1 text-[0.7rem] text-white uppercase tracking-wider dark:text-white/80"
+								className="rounded-full bg-black/80 px-3 py-1 text-[0.7rem] tracking-wider text-white uppercase dark:text-white/80"
 								key={tag}
 							>
 								{tag}
@@ -47,7 +47,7 @@ function Project({ title, tags, imageUrl }: ProjectProps) {
 					src={imageUrl}
 					alt={title}
 					quality={95}
-					className="absolute top-8 -right-40 hidden w-113 rounded-t-lg shadow-2xl transition group-even:right-[initial] group-even:-left-40 group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2 group-hover:scale-[1.04] group-even:group-hover:translate-x-3 group-even:group-hover:translate-y-3 group-even:group-hover:rotate-2 sm:block"
+					className="absolute top-8 -right-40 hidden w-113 rounded-t-lg shadow-2xl transition group-even:right-[initial] group-even:-left-40 group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:scale-[1.04] group-hover:-rotate-2 group-even:group-hover:translate-x-3 group-even:group-hover:translate-y-3 group-even:group-hover:rotate-2 sm:block"
 				/>
 			</section>
 		</motion.div>

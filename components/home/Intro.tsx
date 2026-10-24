@@ -55,7 +55,7 @@ function Intro() {
 			</div>
 
 			<motion.h1
-				className="mt-4 mb-10 px-4 font-medium text-xl leading-normal! sm:text-3xl"
+				className="mt-4 mb-10 px-4 text-xl leading-normal! font-medium sm:text-3xl"
 				initial={{ opacity: 0, y: 100 }}
 				animate={{ opacity: 1, y: 0 }}
 			>
@@ -71,7 +71,7 @@ function Intro() {
 			</motion.h1>
 
 			<motion.div
-				className="flex flex-col items-center justify-center gap-4 px-4 font-medium text-base sm:flex-row"
+				className="flex flex-col items-center justify-center gap-4 px-4 text-base font-medium sm:flex-row"
 				initial={{ opacity: 0, y: 100 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ delay: 0.1 }}
@@ -79,7 +79,7 @@ function Intro() {
 				<div>
 					<a href="#contact">
 						<MyButton
-							className="group flex items-center gap-2 rounded-full bg-gray-900 px-7 py-3 text-white outline-none transition hover:scale-105 hover:bg-gray-950 focus:scale-105 active:scale-100"
+							className="group flex items-center gap-2 rounded-full bg-gray-900 px-7 py-3 text-white transition outline-none hover:scale-105 hover:bg-gray-950 focus:scale-105 active:scale-100"
 							onClick={() => {
 								setActiveSection("Contact");
 								setTimeOfLastClick(Date.now());
@@ -92,7 +92,7 @@ function Intro() {
 				</div>
 				<div>
 					<a
-						className="borderBlack flex cursor-pointer items-center gap-2 rounded-full bg-white p-4 text-gray-700 outline-none transition hover:scale-[1.15] hover:text-gray-950 focus:scale-110 active:scale-105 dark:bg-white/10 dark:text-white/80 active:dark:bg-white/20"
+						className="borderBlack flex cursor-pointer items-center gap-2 rounded-full bg-white p-4 text-gray-700 transition outline-none hover:scale-[1.15] hover:text-gray-950 focus:scale-110 active:scale-105 dark:bg-white/10 dark:text-white/80 active:dark:bg-white/20"
 						href="https://www.linkedin.com/in/bbilginerdem/"
 						target="_blank"
 						aria-label="View my Linkedin profile"
@@ -104,7 +104,7 @@ function Intro() {
 				</div>
 				<div>
 					<a
-						className="borderBlack flex cursor-pointer items-center gap-2 rounded-full bg-white p-4 text-gray-700 outline-none transition hover:scale-[1.15] hover:text-gray-950 focus:scale-110 active:scale-105 dark:bg-white/10 dark:text-white/80 active:dark:bg-white/20"
+						className="borderBlack flex cursor-pointer items-center gap-2 rounded-full bg-white p-4 text-gray-700 transition outline-none hover:scale-[1.15] hover:text-gray-950 focus:scale-110 active:scale-105 dark:bg-white/10 dark:text-white/80 active:dark:bg-white/20"
 						href="https://github.com/bbilginerdem"
 						target="_blank"
 						aria-label="View my GitHub profile"

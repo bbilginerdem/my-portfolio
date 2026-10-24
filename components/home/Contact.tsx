@@ -33,7 +33,7 @@ export default function Contact() {
 				transition={{ duration: 0.6 }}
 			>
 				<div className="p-8 sm:p-12">
-					<p className="mb-10 text-gray-700 text-sm leading-relaxed sm:text-base dark:text-white/70">
+					<p className="mb-10 text-sm leading-relaxed text-gray-700 sm:text-base dark:text-white/70">
 						{t("description")}
 					</p>
 
@@ -42,7 +42,7 @@ export default function Contact() {
 							href={`mailto:${email}`}
 							className="group flex items-center justify-center gap-2 rounded-2xl bg-gray-900 px-7 py-4 text-white transition hover:bg-gray-800 active:scale-95 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
 						>
-							<span className="font-semibold text-sm uppercase tracking-wide">
+							<span className="text-sm font-semibold tracking-wide uppercase">
 								{t("sendEmail")}
 							</span>
 							<Mail size={18} className="opacity-70 transition group-hover:translate-x-1" />
@@ -58,7 +58,7 @@ export default function Contact() {
 							) : (
 								<Copy size={18} className="text-gray-500" />
 							)}
-							<span className="font-semibold text-gray-700 text-sm uppercase tracking-wide dark:text-white">
+							<span className="text-sm font-semibold tracking-wide text-gray-700 uppercase dark:text-white">
 								{t("copyAddress")}
 							</span>
 						</button>
@@ -66,7 +66,7 @@ export default function Contact() {
 				</div>
 
 				<div className="bg-gray-50/50 px-8 py-4 dark:bg-white/5">
-					<p className="text-[10px] text-gray-500 uppercase tracking-widest dark:text-white/30">
+					<p className="text-[10px] tracking-widest text-gray-500 uppercase dark:text-white/30">
 						{t("info")}
 					</p>
 				</div>

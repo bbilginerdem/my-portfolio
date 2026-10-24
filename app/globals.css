@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-@variant dark (&:is(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 pre.shiki {
 	@apply my-8 overflow-hidden rounded-xl border border-black/10 dark:border-white/10 p-4 overflow-x-auto bg-transparent;

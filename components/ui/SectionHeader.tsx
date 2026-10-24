@@ -19,7 +19,7 @@ export default function SectionHeading({ mb, children }: Readonly<SectionHeading
 	};
 
 	return (
-		<h2 className={`${mbVariants[mb]} text-center font-medium text-2xl capitalize sm:text-3xl`}>
+		<h2 className={`${mbVariants[mb]} text-center text-2xl font-medium capitalize sm:text-3xl`}>
 			{children}
 		</h2>
 	);

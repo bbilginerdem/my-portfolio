@@ -17,7 +17,7 @@ export default function Loading() {
 					}}
 				/>
 				<motion.div
-					className="absolute inset-0 rounded-full border-pink-500 border-t-4 shadow-[0_0_20px_rgba(236,72,153,0.5)]"
+					className="absolute inset-0 rounded-full border-t-4 border-pink-500 shadow-[0_0_20px_rgba(236,72,153,0.5)]"
 					animate={{ rotate: 360 }}
 					transition={{
 						duration: 1.5,
@@ -26,7 +26,7 @@ export default function Loading() {
 					}}
 				/>
 				<motion.div
-					className="absolute inset-4 rounded-full border-indigo-500 border-b-4 shadow-[0_0_15px_rgba(99,102,241,0.5)]"
+					className="absolute inset-4 rounded-full border-b-4 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.5)]"
 					animate={{ rotate: -360 }}
 					transition={{
 						duration: 2,

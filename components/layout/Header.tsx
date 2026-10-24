@@ -32,7 +32,7 @@ export default function Header({
 	return (
 		<header className="relative z-999">
 			<motion.div
-				className="fixed top-0 left-1/2 hidden h-14 w-full rounded-none border border-white border-opacity-40 bg-white bg-opacity-80 shadow-black/3 shadow-lg backdrop-blur-sm sm:top-6 sm:block sm:h-13 sm:w-lg sm:rounded-full dark:border-black/40 dark:bg-gray-900 dark:bg-opacity-75"
+				className="border-opacity-40 bg-opacity-80 dark:bg-opacity-75 fixed top-0 left-1/2 hidden h-14 w-full rounded-none border border-white bg-white shadow-lg shadow-black/3 backdrop-blur-sm sm:top-6 sm:block sm:h-13 sm:w-lg sm:rounded-full dark:border-black/40 dark:bg-gray-900"
 				initial={{ y: -100, x: "-50%", opacity: 0 }}
 				animate={{ y: 0, x: "-50%", opacity: 1 }}
 			/>
@@ -52,8 +52,8 @@ export default function Header({
 				</button>
 			</motion.div>
 
-			<nav className="fixed top-[0.15rem] left-1/2 hidden h-12 -translate-x-1/2 py-2 sm:top-[1.7rem] sm:flex sm:h-initial sm:py-0">
-				<ul className="flex w-initial flex-nowrap items-center justify-center gap-5 font-medium text-[0.9rem] text-gray-500">
+			<nav className="sm:h-initial fixed top-[0.15rem] left-1/2 hidden h-12 -translate-x-1/2 py-2 sm:top-[1.7rem] sm:flex sm:py-0">
+				<ul className="w-initial flex flex-nowrap items-center justify-center gap-5 text-[0.9rem] font-medium text-gray-500">
 					{links.map((link) => (
 						<li key={link.name}>
 							<Link
@@ -93,9 +93,9 @@ export default function Header({
 						initial={{ opacity: 0, y: -20 }}
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -20, transition: { duration: 0.15 } }}
-						className="fixed top-16 left-0 w-full rounded-b-2xl border-black/10 border-b bg-white/95 px-4 py-6 shadow-xl backdrop-blur-md sm:hidden dark:border-white/10 dark:bg-gray-900/95"
+						className="fixed top-16 left-0 w-full rounded-b-2xl border-b border-black/10 bg-white/95 px-4 py-6 shadow-xl backdrop-blur-md sm:hidden dark:border-white/10 dark:bg-gray-900/95"
 					>
-						<ul className="flex flex-col items-center justify-center gap-6 font-medium text-[1.1rem] text-gray-500">
+						<ul className="flex flex-col items-center justify-center gap-6 text-[1.1rem] font-medium text-gray-500">
 							{links.map((link) => (
 								<li key={link.name}>
 									<Link

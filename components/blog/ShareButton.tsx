@@ -180,7 +180,7 @@ export default function ShareButton({
 			disabled={isSharing}
 			aria-label={ariaLabel}
 			aria-busy={isSharing}
-			className="font-bold text-blue-600 text-sm transition hover:underline disabled:cursor-not-allowed disabled:opacity-50 dark:text-blue-400 dark:focus:ring-offset-gray-900"
+			className="text-sm font-bold text-blue-600 transition hover:underline disabled:cursor-not-allowed disabled:opacity-50 dark:text-blue-400 dark:focus:ring-offset-gray-900"
 		>
 			<span className="sr-only" aria-live="polite">
 				{isSharing ? "Sharing in progress" : ""}

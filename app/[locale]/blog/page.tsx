@@ -49,7 +49,7 @@ export default async function BlogPage(props: Readonly<Props>) {
 					<Link
 						href="/blog"
 						className={clsx(
-							"rounded-full px-4 py-2 font-semibold text-sm transition-colors",
+							"rounded-full px-4 py-2 text-sm font-semibold transition-colors",
 							!tag
 								? "bg-blue-600 text-white dark:bg-blue-500"
 								: "bg-black/5 text-gray-600 hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10",
@@ -62,7 +62,7 @@ export default async function BlogPage(props: Readonly<Props>) {
 							key={tagItem}
 							href={`/blog?tag=${tagItem}`}
 							className={clsx(
-								"rounded-full px-4 py-2 font-semibold text-sm transition-colors",
+								"rounded-full px-4 py-2 text-sm font-semibold transition-colors",
 								tag === tagItem
 									? "bg-blue-600 text-white dark:bg-blue-500"
 									: "bg-black/5 text-gray-600 hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10",
@@ -81,7 +81,7 @@ export default async function BlogPage(props: Readonly<Props>) {
 							className="group flex flex-col overflow-hidden rounded-2xl border border-black/5 bg-gray-50 transition-all hover:-translate-y-1 hover:bg-gray-100 hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
 						>
 							<div className="flex flex-1 flex-col p-6 sm:p-8">
-								<div className="flex items-center gap-3 text-gray-500 text-xs dark:text-gray-400">
+								<div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
 									<time dateTime={post.publishDate}>
 										{new Date(post.publishDate).toLocaleDateString("en-US", {
 											month: "short",
@@ -94,17 +94,17 @@ export default async function BlogPage(props: Readonly<Props>) {
 										{post.readingTime} {t("minRead")}
 									</span>
 								</div>
-								<h3 className="mt-4 font-bold text-xl leading-tight transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
+								<h3 className="mt-4 text-xl leading-tight font-bold transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
 									{post.title}
 								</h3>
-								<p className="mt-3 line-clamp-3 text-gray-600 text-sm leading-relaxed dark:text-gray-400">
+								<p className="mt-3 line-clamp-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
 									{post.excerpt}
 								</p>
 								<div className="mt-auto flex flex-wrap gap-2 pt-6">
 									{post.tags.slice(0, 3).map((postTag) => (
 										<span
 											key={postTag}
-											className="rounded-full bg-black/5 px-2.5 py-1 font-medium text-[0.65rem] text-gray-600 uppercase tracking-wider dark:bg-white/5 dark:text-gray-400"
+											className="rounded-full bg-black/5 px-2.5 py-1 text-[0.65rem] font-medium tracking-wider text-gray-600 uppercase dark:bg-white/5 dark:text-gray-400"
 										>
 											{postTag}
 										</span>
