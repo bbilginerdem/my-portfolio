@@ -1,7 +1,8 @@
 import rehypeShiki from "@shikijs/rehype";
 import { notFound } from "next/navigation";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import PostTags from "@/components/blog/PostTags";
 import ShareButton from "@/components/blog/ShareButton";
 import { Link } from "@/i18n/navigation";
 import { type Locale, routing } from "@/i18n/routing";
@@ -13,6 +14,13 @@ type Props = Readonly<{
 
 export async function generateMetadata({ params }: Props) {
 	const { slug, locale } = await params;
+
+	if (!routing.locales.includes(locale as Locale)) {
+		return {
+			title: "Post Not Found",
+		};
+	}
+
 	const post = await getPostBySlug(slug, locale);
 
 	if (!post) {
@@ -29,10 +37,11 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function BlogPostPage({ params }: Props) {
 	const { slug, locale } = await params;
+
 	if (!routing.locales.includes(locale as Locale)) {
 		notFound();
 	}
-	setRequestLocale(locale);
+
 	const post = await getPostBySlug(slug, locale);
 	const t = await getTranslations("Blog");
 
@@ -51,17 +60,7 @@ export default async function BlogPostPage({ params }: Props) {
 					{t("backToBlogs")}
 				</Link>
 				<header className="mb-12 text-pretty">
-					<div className="mb-6 flex flex-wrap items-center gap-3">
-						{post.metadata.tags.map((tag) => (
-							<Link
-								key={tag}
-								href={`/blog?tag=${tag}`}
-								className="rounded-full bg-blue-500/10 px-3 py-1 text-[10px] font-bold tracking-widest text-blue-600 uppercase transition-colors hover:bg-blue-500/20 dark:text-blue-400 dark:hover:bg-blue-500/20"
-							>
-								{tag}
-							</Link>
-						))}
-					</div>
+					<PostTags tags={post.metadata.tags} variant="header" maxVisible={5} />
 					<h1 className="mb-8 text-4xl leading-[1.1] font-extrabold tracking-tight text-gray-900 sm:text-6xl dark:text-white">
 						{post.metadata.title}
 					</h1>
@@ -74,11 +73,14 @@ export default async function BlogPostPage({ params }: Props) {
 								className="font-medium text-gray-900 dark:text-gray-200"
 								dateTime={post.metadata.publishDate}
 							>
-								{new Date(post.metadata.publishDate).toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "long",
-									day: "numeric",
-								})}
+								{new Date(post.metadata.publishDate).toLocaleDateString(
+									locale === "tr" ? "tr-TR" : "en-US",
+									{
+										year: "numeric",
+										month: "long",
+										day: "numeric",
+									},
+								)}
 							</time>
 						</div>
 						<div className="hidden h-8 w-px bg-black/10 sm:block dark:bg-white/10" />
@@ -114,17 +116,7 @@ export default async function BlogPostPage({ params }: Props) {
 				</div>
 
 				<div className="mt-20 flex items-center justify-between border-t border-black/5 pt-10 dark:border-white/5">
-					<div className="flex gap-2">
-						{post.metadata.tags.map((tag) => (
-							<Link
-								key={tag}
-								href={`/blog?tag=${tag}`}
-								className="rounded-full bg-black/5 px-4 py-2 text-xs font-semibold text-gray-500 transition-colors hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10"
-							>
-								#{tag}
-							</Link>
-						))}
-					</div>
+					<PostTags tags={post.metadata.tags} variant="footer" maxVisible={5} />
 					<ShareButton title={post.metadata.title} />
 				</div>
 			</article>

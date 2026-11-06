@@ -1,0 +1,154 @@
+---
+title: "MCP: Yapay Zekanın USB-C'si — Her Geliştiricinin Bu Protokolü Neden Bilmesi Gerekiyor?"
+publishDate: "2026-07-08T15:20:00Z"
+author: "Behzat Bilgin Erdem"
+excerpt: "Model Context Protocol (MCP), yapay zeka ajanlarının her türlü araç, API ve veri kaynağıyla konuşmasını sağlayan evrensel standarda dönüşüyor ve yazılım geliştirme biçimimizi kökten değiştiriyor."
+readingTime: 8
+tags:
+  - Yapay Zeka
+  - MCP
+  - Ajanlar
+  - Geliştirici Araçları
+category: "Teknoloji"
+---
+
+# MCP: Yapay Zekanın USB-C'si
+
+Son zamanlarda yapay zeka dünyasını takip ediyorsanız, **MCP** teriminin giderek daha sık kullanıldığını duymuşsunuzdur. Model Context Protocol sıradan bir kısaltma değil; yapay zeka çağının en kritik altyapı katmanı haline geliyor ve bir yazılımcıysanız bunu *hemen şimdi* anlamanız gerekiyor.
+
+## MCP'nin Çözdüğü Sorun
+
+USB-C öncesindeki kargaşayı hatırlayın. Her cihazın kendine özgü bir kablosu, ayrı bir konektörü ve farklı bir standardı vardı. Cihazları birbirine bağlamak adaptörler ve uyumsuzluklarla dolu bir kabustu.
+
+**Bir yıl önce yapay zeka ajanlarının durumu tam olarak buydu.**
+
+Her yapay zeka asistanının araçlara bağlanmak için kendi yöntemi vardı: özel eklentiler, özel entegrasyonlar, kuruma has API'ler. Hem veritabanınızla hem GitHub'ınızla hem de Slack'inizle konuşabilen bir ajan geliştirmek, üç ayrı entegrasyon katmanı yazmak demekti.
+
+MCP tüm bu tabloyu değiştirdi.
+
+## Model Context Protocol Nedir?
+
+2024'ün sonlarında **Anthropic** tarafından geliştirilen ve açık kaynak olarak sunulan MCP; yapay zeka modellerinin harici araçlar, veri kaynakları ve servislerle nasıl iletişim kuracağını tanımlayan standart, açık bir protokoldür. Onu yapay zeka ajanınız ile dünyanın geri kalanı arasındaki evrensel çevirmen olarak düşünebilirsiniz.
+
+Mimarisi son derece zarif ve sadedir:
+
+- **MCP Hosts (Ev Sahipleri)**: Yapay zeka yeteneklerini *kullanmak* isteyen uygulamalar (örneğin Cursor, Claude Desktop veya kendi uygulamanız).
+- **MCP Clients (İstemciler)**: Host içerisinde barınan ve bağlantıları yöneten protokol istemcileri.
+- **MCP Servers (Sunucular)**: Dosya sistemi, veritabanı, web arama aracı veya bir API gibi belirli yetenekleri *dışa açan* hafif programlar.
+
+```typescript title="TypeScript ile Minimum MCP Sunucusu"
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { z } from "zod";
+
+const server = new McpServer({ name: "my-tool-server", version: "1.0.0" });
+
+server.tool(
+  "get_weather",
+  { city: z.string() },
+  async ({ city }) => {
+    const data = await fetchWeather(city);
+    return { content: [{ type: "text", text: JSON.stringify(data) }] };
+  }
+);
+
+const transport = new StdioServerTransport();
+await server.connect(transport);
+```
+
+MCP sunucunuz bir kez çalışmaya başladığında, **herhangi bir** MCP uyumlu yapay zeka hostu onu keşfedebilir, yeteneklerini anlayabilir ve yapay zeka tarafında tek satır ek kod yazmanıza gerek kalmadan çağırabilir.
+
+## Ekosistemin Hızlı Yükselişi
+
+MCP'nin gerçek gücü, 2026'nın başlarında topluluğun inanılmaz bir hızla sunucular geliştirmeye başlamasıyla belirginleşti. Bugün şu alanlarda çalışan sayısız MCP sunucusu mevcut:
+
+| Kategori | Örnekler |
+|---|---|
+| **Geliştirici Araçları** | GitHub, GitLab, Linear, Jira |
+| **Veritabanları** | PostgreSQL, MySQL, MongoDB, Supabase |
+| **Bulut Sistemleri** | AWS, GCP, Vercel, Cloudflare |
+| **Üretkenlik** | Slack, Notion, Google Calendar |
+| **Web** | Brave Search, Puppeteer, Playwright |
+| **Yerel Ortam** | Dosya Sistemi, Terminal, Docker |
+
+Bu liste her hafta daha da genişliyor. MCP ekosistemi, yapay zeka araçlarının npm kayıt defteri (registry) haline gelmiş durumda.
+
+## Frontend Geliştiricileri İçin Neden Önemli?
+
+*"Bu kulağa backend konusu gibi geliyor"* diye düşünebilirsiniz. Ancak MCP, frontend geliştirici deneyimini de temelden dönüştürüyor.
+
+**Geliştirme ortamınız (IDE) artık bir ajan çalışma zamanıdır (runtime).**
+
+Cursor, Windsurf ve VS Code (Copilot Agent modu ile) halihazırda MCP desteğine sahiptir. Bu sayede kodlama asistanınız şu anda şunları yapabilir:
+
+1. Depo dosyalarınızı okuyabilir.
+2. Şema bağlamı için doğrudan gerçek veritabanınızı sorgulayabilir.
+3. Açık biletler için Linear panonuzda arama yapabilir.
+4. Test paketinizi çalıştırabilir.
+5. Yeni bir branch açıp GitHub'da Pull Request oluşturabilir.
+
+Bunların hepsi tek bir prompt ve tek bir bağlam penceresi içinde gerçekleşir. Kopyala-yapıştır yok, sekme değiştirme yok, bağlam kaybı yok.
+
+> "Yazılım geliştirmedeki darboğaz artık yazma hızı değil, bağlam değiştirmedir (context switching). MCP bu bağlam değişimini tamamen ortadan kaldırıyor."
+
+## İlk MCP Sunucunuzu Oluşturun: Gerçek Bir Örnek
+
+Diyelim ki yapay zeka ajanınıza portfolyonuzun blog yazısı meta verilerine erişim hakkı tanımak istiyorsunuz. Bunu yapmak bu kadar kolaydır:
+
+```typescript title="portfolio-mcp-server.ts"
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { glob } from "glob";
+import matter from "gray-matter";
+import fs from "fs";
+import path from "path";
+
+const server = new McpServer({ name: "portfolio-blog", version: "1.0.0" });
+
+server.resource("all_posts", "blog://posts", async (uri) => {
+  const files = await glob("content/blog/en/*.mdx");
+  const posts = files.map((file) => {
+    const raw = fs.readFileSync(file, "utf-8");
+    const { data } = matter(raw);
+    return { slug: path.basename(file, ".mdx"), ...data };
+  });
+  return {
+    contents: [{ uri: uri.href, text: JSON.stringify(posts, null, 2) }],
+  };
+});
+```
+
+Artık MCP uyumlu herhangi bir yapay zeka modeli *"Yapay zeka hakkında hangi blog yazılarını yazdım?"* diye sorabilir ve doğrudan içeriğinizden canlı, doğru bir yanıt alabilir.
+
+## Konuşmamız Gereken Güvenlik İlkeleri
+
+MCP'nin sunduğu güç, sorumluluğu da beraberinde getirir. Bir yapay zeka modeline dosya sisteminize yazma ya da GitHub'ınıza kod gönderme yetkisi vermek hafife alınacak bir konu değildir.
+
+MCP dağıtımları için temel güvenlik ilkeleri:
+
+- **En Az Yetki İlkesi (Principle of Least Privilege)**: MCP sunucunuz yalnızca ajanın gerçekten ihtiyaç duyduğu şeyleri sunmalıdır. Yalnızca veritabanı okuması gerekiyorsa dosya sistemi erişimi vermeyin.
+- **İnsan Denetimi (Human-in-the-Loop)**: Yüksek riskli işlemler (git push, veritabanına yazma, dosya silme) için açık kullanıcı onayı isteyin.
+- **Denetim Günlüğü (Audit Logging)**: Bir ajanın yaptığı her araç çağrısını günlüğe kaydedin. Bir şeyler ters giderse geriye dönük iz sürebilmeniz gerekir.
+- **Sunucu Kimlik Doğrulaması**: HTTP+SSE üzerinden uzak MCP sunucuları çalıştırırken her zaman geçerli kimlik doğrulama tokenları kullanın.
+
+Araçlar son derece güçlüdür; onları sorumlu bir şekilde kullanın.
+
+## Sırada Ne Var?
+
+MCP şartnamesi henüz yeni ve yol haritası heyecan verici:
+
+- **Çoklu ajan orkestrasyonu**: Her biri kendi MCP bağlamına sahip alt ajanlar başlatan sistemler.
+- **Akış yanıtları (Streaming responses)**: Yalnızca tek seferlik araç çağrıları değil, gerçek zamanlı veri akışları.
+- **Uzak MCP sunucuları**: Bulut fonksiyonları olarak dağıtılabilen, yapay zeka entegrasyonunu bir npm paketi kurmak kadar kolaylaştıran yapılar.
+- **Standartlaştırılmış kimlik doğrulama**: MCP sunucularının kullanıcı düzeyindeki verileri güvenle işleyebilmesi için OAuth 2.0 entegrasyonu.
+
+## Sonuç
+
+MCP geçici bir heves değildir. Kendisinden sonra gelecek tüm bir uygulama nesline zemin hazırlayan temel altyapıdır. REST API'lerin Web 2.0 patlamasını sağlaması gibi, MCP de **yapay zeka ajanları devrimini** mümkün kılmaktadır.
+
+Bugün bu protokolü kavrayan geliştiriciler, önümüzdeki on yılın en etkili yapay zeka tabanlı uygulamalarının mimarları olacaklardır.
+
+Beklemeyin. Bu hafta sonu kendinize bir MCP sunucusu inşa edin.
+
+---
+
+*Projelerinizde MCP kullanmaya başladınız mı? Hangi araçları bağlıyorsunuz? Deneyimlerinizi duymaktan memnuniyet duyarım.*

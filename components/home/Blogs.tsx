@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import PostTags from "@/components/blog/PostTags";
 import { Link } from "@/i18n/navigation";
 import { useSectionInView } from "@/lib/hooks";
 import type { BlogMetadata } from "@/lib/types";
@@ -47,16 +48,7 @@ export default function Blogs({ posts }: Readonly<BlogsProps>) {
 								<p className="mt-3 line-clamp-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
 									{post.excerpt}
 								</p>
-								<div className="mt-auto flex flex-wrap gap-2 pt-6">
-									{post.tags.slice(0, 2).map((tag) => (
-										<span
-											key={tag}
-											className="rounded-full bg-black/5 px-2.5 py-1 text-[0.65rem] font-medium tracking-wider text-gray-600 uppercase dark:bg-white/5 dark:text-gray-400"
-										>
-											{tag}
-										</span>
-									))}
-								</div>
+								<PostTags tags={post.tags} variant="card" maxVisible={5} />
 							</div>
 						</Link>
 					</motion.div>

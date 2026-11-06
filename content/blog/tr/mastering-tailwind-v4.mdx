@@ -1,0 +1,44 @@
+---
+title: "Tailwind CSS v4'te Uzmanlaşmak"
+publishDate: "2026-03-14T14:30:00Z"
+author: "Behzat Bilgin Erdem"
+excerpt: "Yeni Tailwind CSS v4 motoru için ipuçları, püf noktaları ve yenilikler."
+readingTime: 3
+tags:
+  - Tailwind CSS
+  - CSS
+  - Frontend
+category: "Tasarım"
+---
+
+# Tailwind CSS v4'te Uzmanlaşmak
+
+Tailwind CSS v4, utility-first CSS ekosistemi için dev bir adımı temsil ediyor. Modern derleme araçlarıyla kusursuz entegrasyon ve yüksek hız hedefiyle baştan aşağı yeniden tasarlandı.
+
+## Yenilikler Neler?
+
+v4 sürümündeki en büyük değişiklik, derleme sürelerini neredeyse anlık seviyeye indiren **Rust tabanlı yeni motor**.
+
+### 1. Yeni Varsayılan Tema
+Tailwind v4, kutudan çıkar çıkmaz çok daha modern ve kaliteli hissettiren yenilenmiş bir renk paleti ve iyileştirilmiş boşluk (spacing) değerleriyle geliyor.
+
+### 2. Sıfır Yapılandırma (Zero Configuration)
+Artık `tailwind.config.js` dosyasına bağımlı kalmadan çalışabilirsiniz; sistem CSS importlarınızdan pek çok ayarı otomatik olarak algılayabiliyor.
+
+### 3. Yerel Glassmorphism Desteği
+Yeni backdrop utility sınıflarıyla buzlu cam (glassmorphism) efektleri oluşturmak artık çok daha pratik:
+
+```html
+<div class="bg-white/10 backdrop-blur-md border border-white/20">
+  Buzlu Cam İçerik
+</div>
+```
+
+## Yükseltme İpuçları
+
+- Eklentilerinizi kontrol edin; bazılarının yeni motor için güncellenmesi gerekebilir.
+- CSS dosyalarınızda yeni `@import "tailwindcss";` sözdizimini kullanmaya başlayın.
+
+## Özet
+
+Tailwind v4'ün odağında hız ve sadelik var. Derleme performansını dert etmeden doğrudan tasarıma odaklanmanızı sağlıyor.

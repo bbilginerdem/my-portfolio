@@ -1,0 +1,49 @@
+---
+title: "Next.js 16 ile Portfolyoma Başlarken"
+publishDate: "2026-01-26T10:00:00Z"
+author: "Behzat Bilgin Erdem"
+excerpt: "En güncel Next.js 16 özellikleri ve React 19 kullanarak bu portfolyoyu nasıl geliştirdiğimin hikayesi."
+readingTime: 5
+tags:
+  - Next.js
+  - React
+  - Portfolyo
+category: "Yazılım Geliştirme"
+---
+
+# Next.js 16 ile Portfolyoma Başlarken
+
+2026 yılında bir portfolyo inşa etmek heyecan verici bir yolculuk! **Next.js 16** ve **React 19**'un yayınlanmasıyla birlikte ekosistem, daha güçlü sunucu taraflı özelliklere ve yüksek performansa doğru evrildi.
+
+## Neden Next.js 16?
+
+Next.js 16, çok daha gelişmiş önbellekleme mekanizmaları ve rafine edilmiş bir App Router sunuyor. **Tailwind CSS v4** ile bir araya geldiğinde geliştirme deneyimi her zamankinden daha akıcı ve hızlı hale geliyor.
+
+### Kullanılan Temel Özellikler:
+- **React Server Components (RSC)**: Daha iyi SEO ve hız için istemci taraflı JavaScript yükünü azaltma.
+- **Tailwind CSS v4**: Sıfır çalışma zamanı (zero-runtime) maliyetli, ışık hızında yeni CSS motoru.
+- **Framer Motion**: Performanstan ödün vermeyen akıcı ve modern animasyonlar.
+
+## Mimari Yapı
+
+Bu portfolyonun mimarisi temiz ve modüler bir yapı üzerine kuruldu. `Intro`, `Projects` ve `Blog` gibi bölümler kendi bağımsız bileşenlerine ayrılarak bakım ve ölçeklenebilirlik kolaylaştırıldı.
+
+```tsx
+export default function Home() {
+  return (
+    <main>
+      <Intro />
+      <Projects />
+      <Skills />
+      <Blogs />
+      <Contact />
+    </main>
+  );
+}
+```
+
+## Sonuç
+
+Bu henüz bir başlangıç. Önümüzdeki aylarda şu an gördüğünüz MDX desteği ve Strapi gibi sistemlerle daha derin entegrasyonlar dahil birçok yeni özellik eklemeye devam edeceğim.
+
+Yeni güncellemeler için takipte kalın!

@@ -9,9 +9,6 @@ export default function LanguageSwitch() {
 	const locale = useLocale();
 	const router = useRouter();
 	const pathname = usePathname();
-	const isBlogPage = pathname.startsWith("/blog");
-
-	if (isBlogPage) return null;
 
 	const switchLocale = () => {
 		const nextLocale = locale === "en" ? "tr" : "en";

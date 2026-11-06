@@ -1,7 +1,8 @@
-import clsx from "clsx";
 import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { getTranslations } from "next-intl/server";
+import BlogTagFilter from "@/components/blog/BlogTagFilter";
+import PostTags from "@/components/blog/PostTags";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
@@ -45,33 +46,7 @@ export default async function BlogPage(props: Readonly<Props>) {
 					<p className="mt-4 text-gray-600 dark:text-gray-400">{t("description")}</p>
 				</div>
 
-				<div className="mt-10 flex flex-wrap justify-center gap-2">
-					<Link
-						href="/blog"
-						className={clsx(
-							"rounded-full px-4 py-2 text-sm font-semibold transition-colors",
-							!tag
-								? "bg-blue-600 text-white dark:bg-blue-500"
-								: "bg-black/5 text-gray-600 hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10",
-						)}
-					>
-						{t("all")}
-					</Link>
-					{allTags.map((tagItem) => (
-						<Link
-							key={tagItem}
-							href={`/blog?tag=${tagItem}`}
-							className={clsx(
-								"rounded-full px-4 py-2 text-sm font-semibold transition-colors",
-								tag === tagItem
-									? "bg-blue-600 text-white dark:bg-blue-500"
-									: "bg-black/5 text-gray-600 hover:bg-black/10 dark:bg-white/5 dark:text-gray-400 dark:hover:bg-white/10",
-							)}
-						>
-							{tagItem}
-						</Link>
-					))}
-				</div>
+				<BlogTagFilter tags={allTags} selectedTag={tag} allLabel={t("all")} />
 
 				<div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
 					{posts.map((post) => (
@@ -83,11 +58,14 @@ export default async function BlogPage(props: Readonly<Props>) {
 							<div className="flex flex-1 flex-col p-6 sm:p-8">
 								<div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
 									<time dateTime={post.publishDate}>
-										{new Date(post.publishDate).toLocaleDateString("en-US", {
-											month: "short",
-											day: "numeric",
-											year: "numeric",
-										})}
+										{new Date(post.publishDate).toLocaleDateString(
+											locale === "tr" ? "tr-TR" : "en-US",
+											{
+												month: "short",
+												day: "numeric",
+												year: "numeric",
+											},
+										)}
 									</time>
 									<span>&bull;</span>
 									<span>
@@ -100,16 +78,7 @@ export default async function BlogPage(props: Readonly<Props>) {
 								<p className="mt-3 line-clamp-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
 									{post.excerpt}
 								</p>
-								<div className="mt-auto flex flex-wrap gap-2 pt-6">
-									{post.tags.slice(0, 3).map((postTag) => (
-										<span
-											key={postTag}
-											className="rounded-full bg-black/5 px-2.5 py-1 text-[0.65rem] font-medium tracking-wider text-gray-600 uppercase dark:bg-white/5 dark:text-gray-400"
-										>
-											{postTag}
-										</span>
-									))}
-								</div>
+								<PostTags tags={post.tags} variant="card" maxVisible={5} />
 							</div>
 						</Link>
 					))}

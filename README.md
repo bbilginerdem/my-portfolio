@@ -24,6 +24,7 @@ A high-performance, premium personal portfolio and blog built with the latest we
 ## 📂 Component Structure
 
 The project follows a clean, atomic organization:
+
 - `components/layout/`: Persistent shells (Header, Footer, Theme toggle).
 - `components/home/`: Specific landing page sections.
 - `components/ui/`: Reusable primitive components.
@@ -31,16 +32,19 @@ The project follows a clean, atomic organization:
 ## 🛠️ Getting Started
 
 First, install dependencies:
+
 ```bash
 pnpm install
 ```
 
 Run the development server:
+
 ```bash
 pnpm dev
 ```
 
 Build for production:
+
 ```bash
 pnpm build
 ```

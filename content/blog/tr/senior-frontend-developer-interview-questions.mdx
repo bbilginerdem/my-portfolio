@@ -1,0 +1,969 @@
+---
+title: "Kıdemli Frontend Mühendisi Mülakat Rehberi: 2026 Edisyonu"
+publishDate: "2026-10-28T16:15:00Z"
+author: "Behzat Bilgin Erdem"
+excerpt: "React, TypeScript, AWS, erişilebilirlik ve test konularında derinlemesine incelemeler ve Shiki destekli zengin kod örnekleriyle en zorlu frontend mülakat sorularında ustalaşın."
+readingTime: 25
+tags:
+  - "Mülakat"
+  - "React"
+  - "TypeScript"
+  - "AWS"
+  - "Test"
+  - "Erişilebilirlik"
+  - "Durum Yönetimi"
+category: "Kariyer"
+---
+
+# Kıdemli Frontend Mühendisi Mülakat Rehberi: 2026 Edisyonu
+
+Frontend dünyası baş döndürücü bir hızla gelişti. 2026 yılında kıdemli (senior) mühendislerden yalnızca kullanıcı arayüzü inşa etmeleri beklenmiyor; ölçeklenebilir sistem mimarileri kurmaları, performansı optimize etmeleri, tasarım ile backend arasındaki köprüyü oluşturmaları ve güvenle canlıya çıkmaları isteniyor. Bu rehber; karşılaşacağınız en zorlu mülakat sorularını, VS Code'a güç veren modern sözdizimi vurgulayıcısı **Shiki** ile zenginleştirilmiş detaylı yanıtlar ve kod örnekleriyle bir araya getiriyor.
+
+> Bu yazıdaki her kod bloğu Shiki'nin gelişmiş yetenekleriyle güçlendirilmiştir: satır içi tip ipuçları için **twoslash**, **satır vurgulama** ve **özel temalar**. Örnekler hem öğretici hem de görsel olarak net olacak şekilde tasarlanmıştır.
+
+---
+
+## İçindekiler
+
+1. [JavaScript/TypeScript (ES6+) Derinlemesine İnceleme](#javascripttypescript-es6-derinlemesine-inceleme)
+2. [React.js İç Mekanizması ve Performans](#reactjs-i̇ç-mekanizması-ve-performans)
+3. [Ölçeklenebilir Durum Yönetimi (State Management)](#ölçeklenebilir-durum-yönetimi-state-management)
+4. [AWS Dağıtım Stratejileri](#aws-dağıtım-stratejileri)
+5. [Erişilebilir ve Duyarlı (Responsive) UI Mimarisi](#erişilebilir-ve-duyarlı-responsive-ui-mimarisi)
+6. [Test: Birim Testlerden Uçtan Uca (E2E) Testlere](#test-birim-testlerden-uçtan-uca-e2e-testlere)
+7. [Sonuç](#sonuç)
+
+---
+
+## JavaScript/TypeScript (ES6+) Derinlemesine İnceleme
+
+### S1: TypeScript Generics ile Derinlemesine İç İçe Nesneleri Düzleştiren (Flattener) Fonksiyon Yazın
+
+**Neden zor:** Özyinelemeli tip çıkarımı (recursive type inference), koşullu tipler (conditional types) ve karmaşık nesne manipülasyonunu test eder.
+
+**Yanıt:** `{ a: { b: { c: 1 } } }` yapısını tipleri koruyarak `{ 'a.b.c': 1 }` haline dönüştüren düzleştirme fonksiyonu.
+
+```ts twoslash
+// TypeScript twoslash çıkarılan tipleri satır içinde gösterir
+type Flatten<T extends object, Prefix extends string = ''> = {
+  [K in keyof T]: T[K] extends object
+    ? Flatten<T[K], `${Prefix}${K & string}.`>
+    : { [P in `${Prefix}${K & string}`]: T[K] }
+}[keyof T]
+
+function flatten<T extends object>(obj: T): Flatten<T> {
+  const result = {} as Flatten<T>
+
+  function recurse(current: any, path: string[]) {
+    if (current && typeof current === 'object' && !Array.isArray(current)) {
+      for (const key in current) {
+        recurse(current[key], [...path, key])
+      }
+    } else {
+      // @ts-expect-error - dinamik anahtar ataması
+      result[path.join('.')] = current
+    }
+  }
+
+  recurse(obj, [])
+  return result
+}
+
+// Tam tip güvenliği ile kullanım
+const nested = { a: { b: { c: 42 } }, d: [1, 2] }
+const flat = flatten(nested)
+// flat tipi: { 'a.b.c': number } & { d: number[] }
+```
+
+**Shiki Özelliği Vurgusu:** `twoslash` açıklaması, IDE'deki üzerine gelme (hover) deneyimini simüle ederek tip bilgilerini satır içine ekler.
+
+---
+
+### S2: Tip Güvenli Bir Event Emitter Tasarlayın
+
+**Neden zor:** Gelişmiş eşlenmiş tipler (mapped types) ve varyans kavramının anlaşılmasını gerektirir.
+
+**Yanıt:** Her olayın derleme zamanında zorunlu tutulan kendi yük (payload) tipine sahip olduğu bir event emitter.
+
+```ts twoslash title="lib/event-emitter.ts"
+type EventMap = {
+  click: { x: number; y: number }
+  focus: { element: HTMLElement }
+  data: Array<number>
+}
+
+class TypedEmitter<T extends Record<keyof T, any>> {
+  private listeners: {
+    [K in keyof T]?: Array<(payload: T[K]) => void>
+  } = {}
+
+  on<K extends keyof T>(event: K, callback: (payload: T[K]) => void): void {
+    if (!this.listeners[event]) {
+      this.listeners[event] = []
+    }
+    this.listeners[event]!.push(callback)
+  }
+
+  emit<K extends keyof T>(event: K, payload: T[K]): void {
+    this.listeners[event]?.forEach(callback => callback(payload))
+  }
+
+  off<K extends keyof T>(event: K, callback: (payload: T[K]) => void): void {
+    if (!this.listeners[event]) return
+    this.listeners[event] = this.listeners[event]!.filter(cb => cb !== callback)
+  }
+}
+
+// Kullanım
+const emitter = new TypedEmitter<EventMap>()
+emitter.on('click', ({ x, y }) => console.log(`Tıklandı: ${x}, ${y}`))
+emitter.emit('click', { x: 100, y: 200 }) // Başarılı
+// emitter.emit('click', { x: 100 }) // Hata: y parametresi eksik
+```
+
+### S3: Eşzamanlılık Sınırlı `Promise.all` Gerçekleştirin
+
+**Neden zor:** Asenkron akış kontrolü, hata yönetimi ve dinamik görev yürütmeyi bir araya getirir.
+
+**Yanıt:** Belirli bir eşzamanlılık sınırına saygı göstererek promise'leri gruplar halinde çalıştıran bir yardımcı fonksiyon.
+
+```ts twoslash
+async function mapConcurrent<T, R>(
+  items: T[],
+  mapper: (item: T) => Promise<R>,
+  concurrency: number
+): Promise<R[]> {
+  const results: R[] = []
+  const queue = [...items]
+  const workers = Array(concurrency).fill(Promise.resolve())
+
+  const runWorker = async () => {
+    while (queue.length) {
+      const index = items.length - queue.length // geçerli öğe indeksi
+      const item = queue.shift()!
+      results[index] = await mapper(item)
+    }
+  }
+
+  await Promise.all(workers.map(() => runWorker()))
+  return results
+}
+
+// Örnek kullanım
+const fetchUrls = async (urls: string[]) => {
+  const results = await mapConcurrent(
+    urls,
+    async (url) => {
+      const res = await fetch(url)
+      return res.json()
+    },
+    3 // maksimum 3 eşzamanlı istek
+  )
+  return results
+}
+```
+
+---
+
+## React.js İç Mekanizması ve Performans
+
+### S4: React Eşzamanlı Render (Concurrent Rendering) ve `useTransition` Açıklayın
+
+**Neden zor:** React'in dahili öncelik çizelgelemesini ve arayüz takılmalarının (UI jank) nasıl önleneceğini anlamayı gerektirir.
+
+**Yanıt:** Eşzamanlı render, React'in yüksek öncelikli güncellemeleri işlemek için uzun süren render işlemlerini duraklatabilmesini sağlar. `useTransition`, bir state güncellemesini düşük öncelikli olarak işaretler ve kullanıcı arayüzünü her zaman duyarlı tutar.
+
+```tsx twoslash
+import { useState, useTransition } from 'react'
+
+// Ağır arama simülasyonu
+function mockSearch(query: string): string[] {
+  const items = Array.from({ length: 10000 }, (_, i) => `Öğe ${i}`)
+  return items.filter(item => item.includes(query))
+}
+
+export function SearchResults() {
+  const [query, setQuery] = useState('')
+  const [results, setResults] = useState<string[]>([])
+  const [isPending, startTransition] = useTransition()
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    // Input için anlık güncelleme
+    setQuery(value)
+
+    // Ağır filtrelemeyi ertele
+    startTransition(() => {
+      const filtered = mockSearch(value)
+      setResults(filtered)
+    })
+  }
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={query}
+        onChange={handleChange}
+        placeholder="Ara..."
+      />
+      {isPending && <div>Sonuçlar yükleniyor...</div>}
+      <ul>
+        {results.slice(0, 20).map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+```
+
+**Temel noktalar:**
+- `useTransition`, `isPending` (boolean) ve `startTransition` (fonksiyon) döndürür.
+- `startTransition` içindeki state güncellemeleri düşük öncelikli olarak işaretlenir.
+- React, daha yüksek öncelikli bir güncelleme (kullanıcının yazmaya devam etmesi gibi) geldiğinde `results` bileşeninin render işlemini bölebilir.
+
+### S5: SSR Destekli Medya Sorgusu (Media Query) İçin Özel Hook Geliştirin
+
+**Neden zor:** Sunucu taraflı render (SSR ortamında `window` nesnesi yoktur) ve istemci hidrasyonunu (hydration) hatasız yönetmelidir.
+
+**Yanıt:** Bir medya sorgusunu dinleyen ve eşleşme durumunu döndüren, SSR için varsayılan değere sahip bir hook.
+
+```tsx twoslash
+import { useState, useEffect } from 'react'
+
+export function useMediaQuery(query: string, defaultMatches = false): boolean {
+  const [matches, setMatches] = useState(defaultMatches)
+
+  useEffect(() => {
+    const media = window.matchMedia(query)
+    const listener = (e: MediaQueryListEvent) => setMatches(e.matches)
+
+    // Başlangıç değerini ata
+    setMatches(media.matches)
+
+    media.addEventListener('change', listener)
+    return () => media.removeEventListener('change', listener)
+  }, [query])
+
+  return matches
+}
+
+// Kullanım
+function ResponsiveComponent() {
+  const isMobile = useMediaQuery('(max-width: 768px)')
+  return <div>{isMobile ? 'Mobil görünüm' : 'Masaüstü görünüm'}</div>
+}
+```
+
+**SSR notu:** Hidrasyon uyumsuzluğunu önlemek için user-agent veya beklenen düzene göre bir `defaultMatches` değeri iletin.
+
+### S6: Sıfırdan Sanallaştırılmış Liste (Virtualized List) Oluşturun
+
+**Neden zor:** Scroll olayları, DOM ölçümleri ve performans optimizasyonu konusundaki derinliği test eder.
+
+**Yanıt:** Yalnızca ekranda görünen öğeleri render eden hafif bir sanallaştırılmış liste.
+
+```tsx twoslash
+import { useState, useEffect, useRef } from 'react'
+
+interface VirtualizedListProps<T> {
+  items: T[]
+  height: number
+  itemHeight: number
+  renderItem: (item: T, index: number) => React.ReactNode
+}
+
+export function VirtualizedList<T>({
+  items,
+  height,
+  itemHeight,
+  renderItem
+}: VirtualizedListProps<T>) {
+  const [scrollTop, setScrollTop] = useState(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const totalHeight = items.length * itemHeight
+  const startIndex = Math.floor(scrollTop / itemHeight)
+  const endIndex = Math.min(
+    items.length - 1,
+    Math.ceil((scrollTop + height) / itemHeight)
+  )
+
+  const visibleItems = items.slice(startIndex, endIndex + 1)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (containerRef.current) {
+        setScrollTop(containerRef.current.scrollTop)
+      }
+    }
+    const container = containerRef.current
+    container?.addEventListener('scroll', handleScroll)
+    return () => container?.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  return (
+    <div
+      ref={containerRef}
+      style={{ height, overflowY: 'auto', position: 'relative' }}
+    >
+      <div style={{ height: totalHeight, position: 'relative' }}>
+        {visibleItems.map((item, index) => (
+          <div
+            key={startIndex + index}
+            style={{
+              position: 'absolute',
+              top: (startIndex + index) * itemHeight,
+              height: itemHeight,
+              width: '100%'
+            }}
+          >
+            {renderItem(item, startIndex + index)}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+---
+
+## Ölçeklenebilir Durum Yönetimi (State Management)
+
+### S7: Zustand, Redux Toolkit ve Jotai Karşılaştırması. Zustand ile Global Sepet Deposu (Cart Store) Kurun
+
+**Neden zor:** Farklı durum yönetimi paradigmalarını (flux, atomic, proxy) ve bunların artı/eksilerini kavramayı gerektirir.
+
+**Yanıt:** Zustand minimalisttir ve Immer üzerinden mutasyona izin veren bir hook kullanır. Redux Toolkit, slice ve thunk yapılarıyla daha kuralcıdır. Jotai ise atomik ve modülerdir. İşte Zustand ile sepet deposu:
+
+```ts twoslash
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+interface CartItem {
+  id: string
+  name: string
+  price: number
+  quantity: number
+}
+
+interface CartStore {
+  items: CartItem[]
+  addItem: (item: Omit<CartItem, 'quantity'>) => void
+  removeItem: (id: string) => void
+  updateQuantity: (id: string, quantity: number) => void
+  total: () => number
+}
+
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      addItem: (item) => {
+        const items = get().items
+        const existing = items.find(i => i.id === item.id)
+        if (existing) {
+          set({
+            items: items.map(i =>
+              i.id === item.id
+                ? { ...i, quantity: i.quantity + 1 }
+                : i
+            )
+          })
+        } else {
+          set({ items: [...items, { ...item, quantity: 1 }] })
+        }
+      },
+      removeItem: (id) => {
+        set({ items: get().items.filter(i => i.id !== id) })
+      },
+      updateQuantity: (id, quantity) => {
+        set({
+          items: get().items.map(i =>
+            i.id === id ? { ...i, quantity } : i
+          )
+        })
+      },
+      total: () => {
+        return get().items.reduce(
+          (sum, i) => sum + i.price * i.quantity,
+          0
+        )
+      }
+    }),
+    { name: 'cart-storage' }
+  )
+)
+```
+
+**Bileşende kullanımı:**
+
+```tsx
+function Cart() {
+  const { items, total, removeItem } = useCartStore()
+  return (
+    <div>
+      {items.map(item => (
+        <div key={item.id}>
+          {item.name} x{item.quantity} - ${item.price * item.quantity}
+          <button onClick={() => removeItem(item.id)}>Kaldır</button>
+        </div>
+      ))}
+      <div>Toplam: ${total()}</div>
+    </div>
+  )
+}
+```
+
+### S8: Immer ve TypeScript ile Karmaşık State Yapılarını Yönetin
+
+**Neden zor:** Immer mutasyon benzeri güncellemelere izin verir ancak iç içe geçmiş yapılar için doğru tiplendirme gerektirir.
+
+**Yanıt:** Derinlemesine iç içe geçmiş state'i değişmez (immutable) şekilde güncellemek için Zustand veya Redux ile Immer kullanımı.
+
+```ts twoslash
+import { produce } from 'immer'
+
+interface State {
+  user: {
+    profile: {
+      name: string
+      address: {
+        street: string
+        city: string
+      }
+    }
+    preferences: {
+      theme: 'light' | 'dark'
+    }
+  }
+}
+
+const state: State = {
+  user: {
+    profile: {
+      name: 'John',
+      address: {
+        street: '123 Main St',
+        city: 'Anytown'
+      }
+    },
+    preferences: {
+      theme: 'light'
+    }
+  }
+}
+
+// Immer olmadan (derin kopyalama gerekir)
+const newState1 = {
+  ...state,
+  user: {
+    ...state.user,
+    profile: {
+      ...state.user.profile,
+      address: {
+        ...state.user.profile.address,
+        city: 'New City'
+      }
+    }
+  }
+}
+
+// Immer ile
+const newState2 = produce(state, draft => {
+  draft.user.profile.address.city = 'New City'
+})
+```
+
+**TypeScript, draft nesnesinin orijinaliyle aynı tipe sahip olmasını sağlayarak güncellemeleri tip güvenli kılar.**
+
+---
+
+## AWS Dağıtım Stratejileri
+
+### S9: AWS Üzerinde Bir Next.js Uygulaması İçin CI/CD Pipeline Tasarlayın
+
+**Neden zor:** AWS servisleri (CodePipeline, CodeBuild, S3, CloudFront) hakkındaki bilgiyi ve bunların Next.js ile nasıl çalıştığını sınar.
+
+**Yanıt:** Basitlik için AWS Amplify kullanın veya SSR için S3 + CloudFront + Lambda@Edge ile özel bir işlem hattı oluşturun.
+
+```yaml
+# amplify.yml (Amplify Console)
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+```
+
+**CodePipeline ile özel dağıtım hattı:**
+1. **Kaynak (Source):** CodePipeline'a bağlı GitHub reposu.
+2. **Derleme (Build):** CodeBuild statik sayfalar için `next build` çalıştırır ve sunucusuz fonksiyonları hazırlar.
+3. **Dağıtım (Deploy):**
+   - Statik varlıklar (/\_next/static, public) S3'e yüklenir ve CloudFront üzerinden sunulur.
+   - SSR sayfaları ve API rotaları Serverless Framework veya SST aracılığıyla Lambda fonksiyonları olarak dağıtılır.
+   - CloudFront birden fazla kaynakla (statik için S3, dinamik için Lambda) yapılandırılır.
+
+### S10: Bir Frontend Özelliği İçin Lambda ve API Gateway ile Sunucusuz Fonksiyon Geliştirin
+
+**Neden zor:** Lambda çağrısı, API Gateway entegrasyonu ve CORS mantığını anlamayı gerektirir.
+
+**Yanıt:** Lambda ve API Gateway kullanan sade bir iletişim formu işleyicisi.
+
+```typescript
+// lambda/contact.ts
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
+import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses'
+
+const ses = new SESClient({ region: process.env.AWS_REGION })
+
+export const handler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
+  try {
+    const body = JSON.parse(event.body || '{}')
+    const { name, email, message } = body
+
+    // Doğrulama
+    if (!name || !email || !message) {
+      return {
+        statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        },
+        body: JSON.stringify({ error: 'Eksik alanlar var' })
+      }
+    }
+
+    // SES ile e-posta gönderimi
+    const command = new SendEmailCommand({
+      Source: 'noreply@example.com',
+      Destination: { ToAddresses: ['support@example.com'] },
+      Message: {
+        Subject: { Data: `${name} kişisinden iletişim mesajı` },
+        Body: { Text: { Data: `Gönderen: ${email}\n\n${message}` } }
+      }
+    })
+    await ses.send(command)
+
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      },
+      body: JSON.stringify({ success: true })
+    }
+  } catch (error) {
+    console.error(error)
+    return {
+      statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      },
+      body: JSON.stringify({ error: 'Sunucu hatası oluştu' })
+    }
+  }
+}
+```
+
+**Frontend tarafından çağrı:**
+
+```tsx
+async function submitForm(data: { name: string; email: string; message: string }) {
+  const res = await fetch('https://api.example.com/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  return res.json()
+}
+```
+
+---
+
+## Erişilebilir ve Duyarlı (Responsive) UI Mimarisi
+
+### S11: Focus Trap ve ARIA Özelliklerine Sahip Erişilebilir Bir Modal Bileşeni Geliştirin
+
+**Neden zor:** Erişilebilirlik (a11y); odak yönetimini, ekran okuyucu duyurularını ve klavye etkileşimlerini titizlikle ele almayı zorunlu kılar.
+
+**Yanıt:** Odağı içeride hapseden (focus trap), kapandığında odağı önceki öğeye geri yükleyen ve doğru ARIA rollerine sahip bir modal.
+
+```tsx twoslash
+import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
+
+interface ModalProps {
+  isOpen: boolean
+  onClose: () => void
+  title: string
+  children: React.ReactNode
+}
+
+export function Modal({ isOpen, onClose, title, children }: ModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null)
+  const previousFocus = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    if (isOpen) {
+      // Mevcut odaklanmış öğeyi kaydet
+      previousFocus.current = document.activeElement as HTMLElement
+
+      // Modala odaklan
+      modalRef.current?.focus()
+
+      // Odağı modal içine hapset
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onClose()
+        }
+        if (e.key === 'Tab') {
+          const focusableElements = modalRef.current?.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          )
+          if (!focusableElements?.length) return
+
+          const first = focusableElements[0] as HTMLElement
+          const last = focusableElements[focusableElements.length - 1] as HTMLElement
+
+          if (e.shiftKey) {
+            if (document.activeElement === first) {
+              last.focus()
+              e.preventDefault()
+            }
+          } else {
+            if (document.activeElement === last) {
+              first.focus()
+              e.preventDefault()
+            }
+          }
+        }
+      }
+
+      document.addEventListener('keydown', handleKeyDown)
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown)
+        // Odağı eski öğeye geri yükle
+        previousFocus.current?.focus()
+      }
+    }
+  }, [isOpen, onClose])
+
+  if (!isOpen) return null
+
+  return createPortal(
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+      ref={modalRef}
+      tabIndex={-1}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'rgba(0,0,0,0.5)'
+      }}
+    >
+      <div
+        role="document"
+        style={{
+          background: 'white',
+          padding: '20px',
+          borderRadius: '8px',
+          maxWidth: '500px',
+          width: '100%'
+        }}
+      >
+        <h2>{title}</h2>
+        {children}
+        <button onClick={onClose}>Kapat</button>
+      </div>
+    </div>,
+    document.body
+  )
+}
+```
+
+### S12: CSS Grid ve Container Queries ile Duyarlı Bir Düzen Sistemi Oluşturun
+
+**Neden zor:** Modern duyarlı tasarım medya sorgularının ötesine geçmiştir; container queries bileşen bazlı duyarlılık sağlar.
+
+**Yanıt:** Viewport genişliğine değil, kendi kapsayıcısının (container) genişliğine göre uyum sağlayan kart ızgarası.
+
+```css
+/* styles.css */
+.card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  container-type: inline-size;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Kapsayıcı sorgusu: ızgara kapsayıcısı 600px'ten geniş olduğunda */
+@container (min-width: 600px) {
+  .card {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .card-image {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* Eski tarayıcılar için geri dönüş (fallback) */
+@supports not (container-type: inline-size) {
+  @media (min-width: 768px) {
+    .card {
+      display: flex;
+    }
+  }
+}
+```
+
+**React bileşeni:**
+
+```tsx
+export function CardGrid() {
+  const items = [1,2,3,4,5]
+  return (
+    <div className="card-grid">
+      {items.map(i => (
+        <div key={i} className="card">
+          <img src={`/img${i}.jpg`} alt="" className="card-image" />
+          <div className="card-content">
+            <h3>Kart {i}</h3>
+            <p>Açıklama...</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+---
+
+## Test: Birim Testlerden Uçtan Uca (E2E) Testlere
+
+### S13: React Testing Library ve Jest Kullanarak Kapsamlı Testler Yazın
+
+**Neden zor:** Testler kullanıcı etkileşimlerini, asenkron davranışları ve erişilebilirlik durumlarını eksiksiz kapsamalıdır.
+
+**Yanıt:** Doğrulama ve hata durumlarını içeren bir giriş formunun testi.
+
+```tsx twoslash
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { LoginForm } from './LoginForm'
+
+// API çağrısını mock'la
+jest.mock('../api/auth', () => ({
+  login: jest.fn()
+}))
+
+import { login } from '../api/auth'
+
+describe('LoginForm', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('tüm alanları ve giriş butonunu render eder', () => {
+    render(<LoginForm />)
+
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /log in/i })).toBeInTheDocument()
+  })
+
+  it('alanlar boş olduğunda doğrulama hatalarını gösterir', async () => {
+    render(<LoginForm />)
+
+    await userEvent.click(screen.getByRole('button', { name: /log in/i }))
+
+    expect(await screen.findByText(/email is required/i)).toBeInTheDocument()
+    expect(await screen.findByText(/password is required/i)).toBeInTheDocument()
+    expect(login).not.toHaveBeenCalled()
+  })
+
+  it('doğru değerlerle login API çağrısını gerçekleştirir', async () => {
+    const mockLogin = login as jest.Mock
+    mockLogin.mockResolvedValueOnce({ success: true })
+
+    render(<LoginForm />)
+
+    await userEvent.type(screen.getByLabelText(/email/i), 'test@example.com')
+    await userEvent.type(screen.getByLabelText(/password/i), 'password123')
+    await userEvent.click(screen.getByRole('button', { name: /log in/i }))
+
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith({
+        email: 'test@example.com',
+        password: 'password123'
+      })
+    })
+
+    expect(screen.queryByText(/invalid/i)).not.toBeInTheDocument()
+  })
+
+  it('başarısız girişte hata mesajını görüntüler', async () => {
+    const mockLogin = login as jest.Mock
+    mockLogin.mockRejectedValueOnce(new Error('Invalid credentials'))
+
+    render(<LoginForm />)
+
+    await userEvent.type(screen.getByLabelText(/email/i), 'test@example.com')
+    await userEvent.type(screen.getByLabelText(/password/i), 'wrong')
+    await userEvent.click(screen.getByRole('button', { name: /log in/i }))
+
+    expect(await screen.findByText(/invalid credentials/i)).toBeInTheDocument()
+  })
+
+  it('form gönderilirken butonu devre dışı bırakır', async () => {
+    const mockLogin = login as jest.Mock
+    mockLogin.mockImplementationOnce(() => new Promise(resolve => setTimeout(resolve, 100)))
+
+    render(<LoginForm />)
+
+    await userEvent.type(screen.getByLabelText(/email/i), 'test@example.com')
+    await userEvent.type(screen.getByLabelText(/password/i), 'password123')
+
+    const button = screen.getByRole('button', { name: /log in/i })
+    await userEvent.click(button)
+
+    expect(button).toBeDisabled()
+    expect(screen.getByText(/logging in/i)).toBeInTheDocument()
+
+    await waitFor(() => expect(button).not.toBeDisabled())
+  })
+})
+```
+
+### S14: Özel Komutlar ve CI Entegrasyonu ile Cypress E2E Test Ortamı Kurun
+
+**Neden zor:** E2E testleri gerçekçi senaryolar, ağ mocklama ve CI süreçlerine sorunsuz entegrasyon gerektirir.
+
+**Yanıt:** Özel komutlar ve GitHub Actions ile yapılandırılmış Cypress ortamı.
+
+```typescript
+// cypress/support/commands.ts
+declare namespace Cypress {
+  interface Chainable {
+    login(email: string, password: string): Chainable<void>
+    resetDatabase(): Chainable<void>
+  }
+}
+
+Cypress.Commands.add('login', (email: string, password: string) => {
+  cy.session([email, password], () => {
+    cy.visit('/login')
+    cy.get('[data-cy=email]').type(email)
+    cy.get('[data-cy=password]').type(password)
+    cy.get('[data-cy=submit]').click()
+    cy.url().should('include', '/dashboard')
+  })
+})
+
+Cypress.Commands.add('resetDatabase', () => {
+  cy.exec('npm run db:reset') // veya API endpoint çağrısı
+})
+```
+
+```typescript
+// cypress/e2e/cart.cy.ts
+describe('Alışveriş Sepeti', () => {
+  beforeEach(() => {
+    cy.resetDatabase()
+    cy.login('user@example.com', 'password')
+  })
+
+  it('ürünü sepete ekler ve ödeme adımını tamamlar', () => {
+    cy.visit('/products')
+    cy.contains('Product 1').click()
+    cy.get('[data-cy=add-to-cart]').click()
+    cy.get('[data-cy=cart-count]').should('contain', '1')
+
+    cy.get('[data-cy=cart-icon]').click()
+    cy.url().should('include', '/cart')
+    cy.contains('Product 1').should('be.visible')
+
+    cy.get('[data-cy=checkout]').click()
+    cy.url().should('include', '/checkout')
+
+    cy.get('[data-cy=address]').type('123 Main St')
+    cy.get('[data-cy=payment]').select('Credit Card')
+    cy.get('[data-cy=submit-order]').click()
+
+    cy.contains('Order confirmed').should('be.visible')
+  })
+})
+```
+
+**CI Entegrasyonu (GitHub Actions):**
+
+```yaml
+# .github/workflows/e2e.yml
+name: E2E Tests
+on: [push]
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Bağımlılıkları yükle
+        run: npm ci
+      - name: Uygulamayı başlat
+        run: npm run dev &
+      - name: Uygulamanın hazır olmasını bekle
+        run: npx wait-on http://localhost:3000
+      - name: Cypress çalıştır
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headed: false
+```
+
+---
+
+## Sonuç
+
+2026 yılında bir kıdemli frontend mühendisinin rolü; derin JavaScript/TypeScript uzmanlığı, React hakimiyeti, durum yönetimi tecrübesi, AWS dağıtım yetenekleri, erişilebilirlik odaklı tasarım ve titiz test pratiklerini kapsayan bütüncül bir beceri seti gerektirir. Bu mülakat soruları yalnızca bildiklerinizi değil; mimari, performans ve ekip çalışması hakkında nasıl düşündüğünüzü ortaya çıkarmak için tasarlanmıştır.
+
+Unutmayın: **"Talimatlar ne kadar kusursuzsa, icraat da o kadar başarılı olur. Hassasiyet ve netlik, yeni üretkenlik standardıdır."** İster yeniden kullanılabilir hook'lar yazıyor olun ister ölçeklenebilir durum mimarileri tasarlıyor olun, kıdemli mühendisleri ayırt eden şey netlik ve bilinçli tercihlerdir.
+
+Meraklı kalın, agentic kalın ve mülakatta başarılar!
+
+---
+*Behzat Bilgin Erdem*
