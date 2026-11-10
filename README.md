@@ -53,14 +53,14 @@ pnpm build
 
 ### 📚 Content & Learning
 
-- [ ] **Translate all blogs from english to turkish**: Using LLMs.
+- [x] **Translate all blogs from english to turkish**: Using LLMs.
 - [ ] **Launch Udemy Courses**: Develop and publish structured courses on Frontend Development.
 - [ ] **Regular Blogging**: Industry insights, React/Next.js tutorials, and career advice.
 - [ ] **Deep Dive**: Mastery of Tailwind v4's new engine and React 19's `use` hook.
 
 ### 💻 Technical Enhancements
 
-- [ ] **MDX Support**: Convert standard blog posts to MDX for interactive components within articles.
+- [x] **MDX Support**: Convert standard blog posts to MDX for interactive components within articles.
 - [ ] **Search Functionality**: Implement a global search for blog posts using Fuse.js or Algolia.
 - [ ] **Page Transitions**: Add seamless transitions between the Home and Blog pages.
 - [ ] **Newsletter Integration**: Add a simple subscription form for new courses/blogs.
